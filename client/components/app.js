@@ -34,6 +34,7 @@ const App = class App extends React.Component {
     var self = this;
 
     Issues.getIssues(function(data) {
+      console.log(data);
       self.setState({
         numberOfTickets: data.length,
         ticketsToRender: data.slice(0,199)
@@ -51,6 +52,11 @@ const App = class App extends React.Component {
         reposToRender: data.slice(0,199)
       });
     }, console.log, searchTerm, language);
+  }
+
+  componentDidMount() {
+    this.getIssues();
+    this.getRepos();
   }
 
   render () {
