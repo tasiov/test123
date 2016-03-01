@@ -1,3 +1,5 @@
+const serverUrl = 'http://localhost:3000';
+
 var $ = require('jquery');
 
 module.exports = {};
@@ -7,7 +9,7 @@ var languages = [];
 
 var getReposFromApi = function (successCallback, errCallback, searchTerm, language) {
   var options = {
-    url: 'http://45.55.29.22:3000/api/repos',
+    url: serverUrl + '/api/repos',
     type: 'GET',
     success: successCallback,
     error: errCallback
