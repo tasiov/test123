@@ -5,9 +5,10 @@ var app = express();
 
 var Issues = require('./models/issues');
 Issues = new Issues();
-
 var Repos = require('./models/repos');
 Repos = new Repos();
+var User = require('./models/user');
+User = new User();
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client'));
