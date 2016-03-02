@@ -95,6 +95,18 @@ CREATE TABLE users (
   game_level int UNSIGNED
 );
 
+CREATE TABLE pulls {
+ internal_id INT AUTO_INCREMENT PRIMARY KEY,
+ closed BOOLEAN,
+ name nvarchar(100),
+ user_id INT,
+ FOREIGN KEY (user_id)
+  REFERENCES users(internal_id)
+  ON DELETE CASCADE,
+
+  
+}
+
 
 
 CREATE INDEX OrgRepo ON repos (name ,org_name);
