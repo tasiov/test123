@@ -1,22 +1,23 @@
+"use strict";
 const Promise = require('bluebird');
 var db = require('../db/database');
 var _ = require('lodash');
 
 var User = function() {
-  let this._user = {};
+ this._user = {};
 };
 
-User.prototype.getUser = function(id) {
-
+User.prototype.getUserAsync = function(id) {
+  console.log(this._user.id);
   if ( this._user.id ) {
     return new Promise((resolve) => resolve(this._user));
   } else {
-  return db.raw(`SELECT * FROM USERS
-    WHERE id='${id}'`)
-    .then((results) => {
-      this._user = reults[0];
-      return this._user;
-    });
+  console.log("inside if statement");
+  return db.raw(`SELECT * FROM USERS WHERE id='${id}'`)
+           .then((results) => {
+              this._user = results[0];
+              return this._user;
+           }); 
   }
 
 }
@@ -24,21 +25,25 @@ User.prototype.getUser = function(id) {
 User.prototype.makeNewUser = function(user) {
 
   if ( this._user.id ) {
-    return new Promise((resolve) => resolve(this._user));
+    return new Promise((resolve) => resolve("You are already signed in."));
   } else {
-    let userKeys = [];
-    let userVals = [];
-     _.each(user,(val,key) => {
-      userKeys.push( key + '');
-      userVals.push( val + '');
-     })
+    if(user.id && user.login) {
 
-  return db.raw(`INSERT INTO USERS (${userkeys.join(',')})
-    VALUES(${userVals.join(',')})'`)
-    .then((results) => {
-      this._user = reults[0];
-      return this._user;
-    });
+      // Function to map user properties to usable SQL strings
+      let userKeys = [];
+      let userVals = [];
+       _.each(user,(val,key) => {
+        userKeys.push( key + '');
+        userVals.push( '"' + val + '"');
+       })
+
+      return db.raw(`INSERT INTO USERS ( ${userKeys.join()} )
+      VALUES (${userVals.join()})`)
+        .then((results) => {
+          this._user = results[0];
+          return this._user;
+        });      
+    }
   }
   
 }
