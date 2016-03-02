@@ -7,13 +7,11 @@ var User = function() {
  this._user = {};
 };
 
-User.prototype.getUserAsync = function(id) {
-  console.log(this._user.id);
-  if ( this._user.id ) {
+User.prototype.getUserAsync = function(userHandle) {
+  if ( this._user.login ) {
     return new Promise((resolve) => resolve(this._user));
   } else {
-  console.log("inside if statement");
-  return db.raw(`SELECT * FROM USERS WHERE id='${id}'`)
+  return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
            .then((results) => {
               this._user = results[0];
               return this._user;
@@ -37,7 +35,7 @@ User.prototype.makeNewUser = function(user) {
         userVals.push( '"' + val + '"');
        })
 
-      return db.raw(`INSERT INTO USERS ( ${userKeys.join()} )
+      return db.raw(`INSERT INTO users ( ${userKeys.join()} )
       VALUES (${userVals.join()})`)
         .then((results) => {
           this._user = results[0];
