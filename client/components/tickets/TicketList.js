@@ -1,6 +1,6 @@
 const React = require('react');
 const TicketSearch = require('./TicketSearch');
-const TicketEntry = require('./ticketEntry');
+const TicketEntry = require('./TicketEntry');
 
 
 class TicketList extends React.Component {
