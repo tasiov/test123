@@ -1,5 +1,5 @@
 const React = require('react');
-
+ 
 class UserProfile extends React.Component {
   
   constructor(props) {
