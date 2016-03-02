@@ -2,6 +2,7 @@ var request = require('request');
 var config = require('../config');
 
 module.exports = function(app, express) {
+  var access_token;
 
   app.route('/api')
     .get(function(req, res){
@@ -48,9 +49,9 @@ module.exports = function(app, express) {
       if(error) {
         console.log(error);
       } else {
-        console.log(response.statusCode);
-        res.send(body);
+        access_token = body;
       }
+      res.redirect('/');
     });
   });
 }
