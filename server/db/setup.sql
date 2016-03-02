@@ -95,17 +95,15 @@ CREATE TABLE users (
   game_level int UNSIGNED
 );
 
-CREATE TABLE pulls {
+CREATE TABLE pulls (
  internal_id INT AUTO_INCREMENT PRIMARY KEY,
- closed BOOLEAN,
- name nvarchar(100),
- user_id INT,
+ closed BOOLEAN not null,
+ name nvarchar(100) not null,
+ user_id INT not null,
  FOREIGN KEY (user_id)
   REFERENCES users(internal_id)
-  ON DELETE CASCADE,
-
-  
-}
+  ON DELETE CASCADE
+);
 
 
 

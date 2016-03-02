@@ -13,7 +13,7 @@ User.prototype.getUserAsync = function(id) {
     return new Promise((resolve) => resolve(this._user));
   } else {
   console.log("inside if statement");
-  return db.raw(`SELECT * FROM USERS WHERE id='${id}'`)
+  return db.raw(`SELECT * FROM users WHERE id='${id}'`)
            .then((results) => {
               this._user = results[0];
               return this._user;
@@ -37,7 +37,7 @@ User.prototype.makeNewUser = function(user) {
         userVals.push( '"' + val + '"');
        })
 
-      return db.raw(`INSERT INTO USERS ( ${userKeys.join()} )
+      return db.raw(`INSERT INTO users ( ${userKeys.join()} )
       VALUES (${userVals.join()})`)
         .then((results) => {
           this._user = results[0];
@@ -46,6 +46,15 @@ User.prototype.makeNewUser = function(user) {
     }
   }
   
+}
+User.prototype.howTables = function() {
+ 
+  db.raw(`SHOW TABLES`)
+   .then((results) => {
+      console.log(results);
+   }); 
+  
+
 }
 
 
