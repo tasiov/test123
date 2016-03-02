@@ -7,11 +7,11 @@ var User = function() {
  this._user = {};
 };
 
-User.prototype.getUserAsync = function(id) {
-  if ( this._user.id ) {
+User.prototype.getUserAsync = function(userHandle) {
+  if ( this._user.login ) {
     return new Promise((resolve) => resolve(this._user));
   } else {
-  return db.raw(`SELECT * FROM users WHERE id='${id}'`)
+  return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
            .then((results) => {
               this._user = results[0];
               return this._user;
