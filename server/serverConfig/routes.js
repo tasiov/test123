@@ -39,6 +39,8 @@ module.exports = function(app, express) {
   // GitHub redirects user to /login/auth endpoint after login
   app.get('/login/auth', function(req, res) {
     req.session.user = true;
+
+    // Make initial request to GitHub OAuth for access token
     request({
       url: 'https://github.com/login/oauth/access_token',
       qs: {client_id: '139d346c12b54d57adc5', client_secret: '3ac7e46e12540f1b1c743db3a52e006fe7116bbd', code: req.query.code},
@@ -48,6 +50,18 @@ module.exports = function(app, express) {
         console.log(error);
       } else {
         access_token = body;
+
+        // Make request to github for current user information
+        request({
+          url: 'https://api.github.com/user?' + access_token,
+          headers: {'User-Agent': 'Good-First-Ticket'}
+        }, function(error, response, body) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('body: ', body);
+          }
+        });
       }
       res.redirect('/');
     });

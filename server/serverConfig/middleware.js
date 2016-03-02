@@ -26,7 +26,6 @@ module.exports = function(app, express) {
 
   app.use(unless('/login/auth', function (req, res, next) {
     if (req.session.user) {
-      console.log('User session: ', req.session.user);
       next();
     } else {
       /* If there is no active user session, redirect the client to the
