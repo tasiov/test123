@@ -80,7 +80,8 @@ const App = class App extends React.Component {
               numberOfTickets: this.state.numberOfTickets,
               languages: this.state.languages,
               getIssues: this.getIssues.bind(this),
-              getRepos: this.getRepos.bind(this)
+              getRepos: this.getRepos.bind(this),
+              user:{}
           })}
         </div>
       </div>
