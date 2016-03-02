@@ -53,7 +53,8 @@ CREATE TABLE repos (
 
 CREATE TABLE users (
   internal_id int AUTO_INCREMENT PRIMARY KEY,
-  id int UNSIGNED,
+  login nvarchar(50) not null,
+  id int UNSIGNED not null,
   avatar_url nvarchar(255),
   gravatar_id nvarchar(255),
   url nvarchar(100),
