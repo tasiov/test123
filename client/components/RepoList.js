@@ -8,19 +8,14 @@ class RepoList extends React.Component {
     super(props);
   }
   
-
   componentDidUpdate () {
     //Anytime the component renders, scroll to the top of the repo list
     $('.main-repo-view')[0].scrollTop = 0;
   }
   
-
-  
   render () {
-    
     //for really clean scrolling, we could do something like below to calculate the max height and then set the max height css 
     // var maxHeight = $(window).height() - $('.navbar').outerHeight() - margin * 2;
-    
     return (
     <div >
       <RepoSearch searchHandler={this.props.getRepos} languages={this.props.languages} />
