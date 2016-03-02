@@ -1,5 +1,5 @@
 const React = require('react');
-const NavBar = require('./NavBar'); 
+const NavBar = require('./nav/NavBar'); 
 const Issues = require('../js/issues');
 const Repos = require('../js/repos'); 
 const linksList = [

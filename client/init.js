@@ -5,9 +5,9 @@ const ReactDOM = require('react-dom');
 const { Router, Route, Link, IndexRoute, hashHistory, RouterContext } = require('react-router');
 
 const App = require('./components/app');
-const TicketList = require('./components/TicketList'); 
-const RepoList = require('./components/RepoList'); 
-const RepoProfile = require('./components/RepoProfile'); 
+const TicketList = require('./components/tickets/TicketList'); 
+const RepoList = require('./components/repos/RepoList'); 
+const RepoProfile = require('./components/repos/RepoProfile'); 
 const ResourceList = require('./components/ResourceList');
 
 ReactDOM.render((
