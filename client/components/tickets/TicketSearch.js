@@ -1,5 +1,5 @@
 const React = require('react');
-const Repos = require('../js/repos');
+const Repos = require('../../js/repos');
 
 class TicketSearch extends React.Component {
 

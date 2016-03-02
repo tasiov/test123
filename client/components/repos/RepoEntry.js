@@ -1,6 +1,6 @@
 const React = require('react');
 const Link = require('react-router').Link;
-const TimeAgo = require('../../node_modules/react-timeago/timeago');
+const TimeAgo = require('../../../node_modules/react-timeago/timeago');
 
 class RepoEntry extends React.Component {
   constructor (props) {

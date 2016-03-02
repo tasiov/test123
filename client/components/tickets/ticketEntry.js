@@ -1,5 +1,5 @@
 const React = require('react');
-const TimeAgo = require('../../node_modules/react-timeago/timeago');
+const TimeAgo = require('../../../node_modules/react-timeago/timeago');
 const Link = require('react-router').Link;
 
 const TicketEntry = (props) => (
