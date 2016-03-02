@@ -23,7 +23,7 @@ class RepoSearch extends React.Component {
     let searchHandler = (e) => {
       if (e.charCode === 13 || e.keyCode === 13) {
         let $selected = $('.repo-language-dropdown').find('.selected');
-        let language = $selected[0].innerText.trim();
+        let language = $selected[0] ? $selected[0].innerText.trim() : '';
         this.props.searchHandler(e.target.value, language);
       }
       
@@ -34,7 +34,7 @@ class RepoSearch extends React.Component {
             </div>
             <div className="input-field col s2">
               <select className='repo-language-dropdown' defaultValue='Select a Language...'>
-                <option value='Select a Language' key={this.props.languages.length}>Select A Language</option>
+                <option value='Select a Language' key={this.props.languages.length}>Select A Language...</option>
                 {this.props.languages.map((lang, index) => <option value={lang} key={lang}>{lang}</option>)}
               </select>
             </div>

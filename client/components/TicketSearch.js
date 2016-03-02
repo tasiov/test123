@@ -23,7 +23,7 @@ class TicketSearch extends React.Component {
     let searchHandler = (e) => {
       if (e.charCode === 13 || e.keyCode === 13) {
         let $selected = $('.issue-language-dropdown').find('.selected');
-        let language = $selected[0].innerText.trim();
+        let language = $selected[0] ? $selected[0].innerText.trim() : '';
         this.props.searchHandler(e.target.value, language);
       }
     }

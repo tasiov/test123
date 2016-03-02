@@ -3,15 +3,9 @@ const NavBar = require('./NavBar');
 const Issues = require('../js/issues');
 const Repos = require('../js/repos'); 
 const linksList = [
-  {
-    name: "tickets", url: '/'
-  },
-  {
-    name: "repositories", url: '/repos'
-  }, 
-  {
-    name: "getting started", url: '/resources'
-  }
+  {name: "tickets", url: '/'},
+  {name: "repositories", url: '/repos'},
+  {name: "getting started", url: '/resources'}
 ];
 
 
