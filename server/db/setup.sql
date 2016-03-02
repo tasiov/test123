@@ -51,4 +51,50 @@ CREATE TABLE repos (
   network_count int
 );
 
-CREATE INDEX OrgRepo ON repos (name,org_name);
+CREATE TABLE users (
+  internal_id int AUTO_INCREMENT PRIMARY KEY,
+  login nvarchar(50) not null,
+  id int UNSIGNED not null,
+  avatar_url nvarchar(255),
+  gravatar_id nvarchar(255),
+  url nvarchar(100),
+  html_url nvarchar(100),
+  followers_url nvarchar(100),
+  following_url nvarchar(100),
+  gists_url nvarchar(100),
+  starred_url nvarchar(100),
+  subscriptions_url nvarchar(100),
+  organizations_url nvarchar(100),
+  repos_url nvarchar(100),
+  events_url nvarchar(100),
+  received_events_url nvarchar(100),
+  site_admin bool,
+  name nvarchar(100),
+  company nvarchar(50),
+  blog nvarchar(100),
+  location nvarchar(50),
+  email nvarchar(50),
+  hireable bool,
+  bio nvarchar(255),
+  public_repos int UNSIGNED,
+  public_gists int UNSIGNED,
+  followers int UNSIGNED,
+  following int UNSIGNED,
+  created_at datetime,
+  updated_at datetime,
+  total_private_repos int UNSIGNED,
+  owned_private_repos int UNSIGNED,
+  private_gists int UNSIGNED,
+  disk_usage int UNSIGNED,
+  collaborators int UNSIGNED,
+  plan_name nvarchar(25),
+  plan_space int UNSIGNED,
+  plan_private_repos int UNSIGNED,
+  plan_collaborators int UNSIGNED,
+  game_tickets_completed int UNSIGNED,
+  game_level int UNSIGNED
+);
+
+
+
+CREATE INDEX OrgRepo ON repos (name ,org_name);
