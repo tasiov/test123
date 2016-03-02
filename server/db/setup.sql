@@ -98,16 +98,3 @@ CREATE TABLE users (
 
 
 CREATE INDEX OrgRepo ON repos (name ,org_name);
-
-
-
-
-
-
-
-
-
-
-
-
-
