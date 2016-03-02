@@ -26,6 +26,7 @@ const App = class App extends React.Component {
       reposToRender: [],
       numberOfRepos: 0,
       numberOfTickets: 0,
+      languages: []
     };
   }
   
@@ -54,9 +55,20 @@ const App = class App extends React.Component {
     }, console.log, searchTerm, language);
   }
 
-  componentDidMount() {
+  setLanguages () {
+    //We should only run this once per component rendering (ie. componentDidMount)
+    //Multiple calls to material_select screws up the rendering
+    Repos.getLanguages((languages) => {
+      this.setState({
+        languages: languages
+      });
+    });
+  }
+
+  componentWillMount() {
     this.getIssues();
     this.getRepos();
+    this.setLanguages();
   }
 
   render () {
@@ -72,6 +84,7 @@ const App = class App extends React.Component {
               reposToRender: this.state.reposToRender,
               numberOfRepos: this.state.numberOfRepos,
               numberOfTickets: this.state.numberOfTickets,
+              languages: this.state.languages,
               getIssues: this.getIssues.bind(this),
               getRepos: this.getRepos.bind(this)
           })}

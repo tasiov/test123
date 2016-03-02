@@ -20,7 +20,7 @@ class TicketList extends React.Component {
     
     return (
     <div>
-      <TicketSearch searchHandler={this.props.getIssues} />
+      <TicketSearch searchHandler={this.props.getIssues} languages={this.props.languages} />
       <h4>{this.props.numberOfTickets} beginner tickets on github</h4>
       <blockquote>labeled on github as easy, beginner, good first bug, etc.
       </blockquote>

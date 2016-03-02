@@ -23,7 +23,7 @@ class RepoList extends React.Component {
     
     return (
     <div >
-      <RepoSearch searchHandler={this.props.getRepos} />
+      <RepoSearch searchHandler={this.props.getRepos} languages={this.props.languages} />
       <h4>{this.props.numberOfRepos} repositories</h4>
       <div className="main-repo-view">
         {this.props.reposToRender.map ((repo, index) => 
