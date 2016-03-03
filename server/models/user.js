@@ -7,8 +7,8 @@ var User = function() {
  this._user = {};
 };
 
-User.prototype.getUserAsync = function(userHandle) {
-  if ( this._user.login ) {
+User.prototype.getUserAsync = function(userHandle, forceUpdate) {
+  if ( this._user.login && !forceUpdate ) {
     return new Promise((resolve) => resolve(this._user));
   } else {
   return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
@@ -30,7 +30,7 @@ User.prototype.updateUserAsync = function(userObj) {
 
   return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
   .then( () => {
-    return this.getUserAsync(userObj.login);
+    return this.getUserAsync(userObj.login, true);
   });
 }
 
