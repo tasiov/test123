@@ -16,7 +16,13 @@ Repos.prototype.getRepos = function () {
    hoursSinceLastFetch > 1) {
     return db.raw(`select * from repos`)
             .then((results) => {
-              this._repos = results[0];
+              var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
+              console.log(RowDataArray[0]);
+              this._repos = RowDataArray.map(RowData => {
+                var regObj = {};
+                Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
+                return regObj;
+              })
               this._lastUpdateDate = new Date();
               return this._repos;
             });
