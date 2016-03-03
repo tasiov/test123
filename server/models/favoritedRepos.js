@@ -46,4 +46,19 @@ FavoritedRepos.prototype.insertFavoritedRepoAsync = function(gitRepoId, userHand
 		});
 }
 
+FavoritedRepos.prototype.deleteFavoritedRepoAsync = function(gitRepoId, userHandle) {
+	return Promise.all([
+			db.raw(`SELECT internal_id FROM repos WHERE id = ${gitRepoId};`),
+			db.raw(`SELECT internal_id FROM users WHERE login = '${userHandle}';`)
+		]).then((allResults) => {
+			var repoInternalId = allResults[0][0][0]['internal_id'];
+			var userInternalId = allResults[1][0][0]['internal_id'];
+			return db.raw(`DELETE FROM repos_users WHERE 
+				repo_id=${repoInternalId} && user_id=${userInternalId};`)
+							.then( () => {
+								return this.getFavoritedReposAsync(userHandle, true);
+							});
+		});
+}
+
 module.exports = FavoritedRepos;
