@@ -15,7 +15,7 @@ User.prototype.getUserAsync = function(userHandle) {
            .then((results) => {
               this._user = results[0];
               return this._user;
-           }); 
+           });
   }
 
 }
@@ -32,8 +32,7 @@ User.prototype.updateUserAsync = function(userObj) {
   });
 }
 
-
-User.prototype.makeNewUser = function(user) {
+User.prototype.makeNewUserAsync = function(user) {
   if ( this._user.id ) {
     return new Promise((resolve) => resolve("You are already signed in."));
   } else {
@@ -51,7 +50,7 @@ User.prototype.makeNewUser = function(user) {
         .then((results) => {
           this._user = results[0];
           return this._user;
-        });      
+        });
     }
   }
 }
