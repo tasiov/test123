@@ -20,7 +20,12 @@ FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefr
   return db.raw(`SELECT repos.name FROM ${dbJoinTableQuery} 
   							WHERE users.login = '${userHandle}'`)
            .then((results) => {
-              this._favoritedRepos = results[0];
+              var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
+              this._favoritedRepos = RowDataArray.map(RowData => {
+                var regObj = {};
+                Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
+                return regObj;
+              })
               return this._favoritedRepos;
            }); 
   }
