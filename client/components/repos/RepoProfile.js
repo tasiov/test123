@@ -9,8 +9,6 @@ class RepoProfile extends React.Component {
     super(props);
 
     this.state = {
-      thumbsUp: 0,
-      thumbsDown: 0,
       repoToRender: {},
       issues: []
     };
@@ -25,17 +23,12 @@ class RepoProfile extends React.Component {
     Issues.getIssuesByRepoId(id, data => this.setState({issues: data}));
   }
 
-  onThumbsUp () {
-    this.setState({
-      thumbsUp: this.state.thumbsUp + 1
+  favorRepo() {
+    $.post('/api/send-favorite', this.state.repoToRender, (data) => {
+      $('.favorite').html('Favorited!');
+      this.render();
     });
   }
-
-  onThumbsDown () {
-    this.setState({
-      thumbsDown: this.state.thumbsDown - 1
-    });
-  }  
 
   componentDidUpdate () {
     //Anytime the component renders, scroll to the top of the repo profile
@@ -62,17 +55,14 @@ class RepoProfile extends React.Component {
                   <strong className="left-align col s3"><span className="octicon octicon-history"></span> updated <TimeAgo date={this.state.repoToRender.updated_at} /></strong>
                   <strong className="center col s3"><span className="octicon octicon-issue-opened"></span> beginner tickets {this.state.repoToRender.beginner_tickets}</strong>
                   <strong className="center col s3"><span className="octicon octicon-git-branch"></span> forks {this.state.repoToRender.forks}</strong>
-                  <div className="right-align col s3 mega-octicon octicon-thumbsup" onClick={ () => {this.onThumbsUp()} }>
-                    <span className="green-text lighten-2"> {this.state.thumbsUp}</span>
+                  <div className="right-align col s3 mega-octicon octicon-thumbsup" onClick={ () => {this.favorRepo()} }>
+                    <span className="green-text lighten-2 favorite">Favorite this repo</span>
                   </div>
                 </div>
                 <div className="row">
                   <strong className="left-align col s3"><span className="octicon octicon-calendar"></span> created <TimeAgo date={this.state.repoToRender.created_at} /></strong>
                   <strong className="center col s3"><span className="octicon octicon-git-pull-request"></span> last push <TimeAgo date={this.state.repoToRender.pushed_at} /></strong>
                   <strong className="center col s3"><span className="octicon octicon-eye"></span> watchers {this.state.repoToRender.watchers_count}</strong>
-                  <div className="right-align col s3 mega-octicon octicon-thumbsdown"  onClick={ () => {this.onThumbsDown()} }>
-                    <span className="red-text lighten-2"> {this.state.thumbsDown}</span>
-                  </div>
                 </div>
                 <div className="row">
                   <strong className="left-align col s3"><a className="cyan-text lighten-2" href={"http://www.github.com/" + this.state.repoToRender.org_name} target="_blank">{this.state.repoToRender.org_name}</a></strong>
