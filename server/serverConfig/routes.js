@@ -60,18 +60,19 @@ module.exports = function(app, express) {
         User.getUserAsync(userObj.login)
         .then(function(user) {
           if (user.length === 0) {
+
             // If user is not in db, insert new user
             User.makeNewUserAsync(userObj)
             .then(function(data) {
               console.log('new user created in db: ', data);
             }).catch(utils.logError);
           } else {
+
             // If user is currently in db, update user data
             User.updateUserAsync(userObj)
             .then(function(data) {
               console.log('user updated: ', data);
-            })
-            .catch(utils.logError);
+            }).catch(utils.logError);
           }
         }).catch(utils.logError);
       }).catch(utils.logError);
