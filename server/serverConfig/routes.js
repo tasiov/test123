@@ -1,5 +1,9 @@
 var request = require('request');
 var config = require('../config');
+
+var utils = require('./utils');
+Promise.promisifyAll(utils);
+
 var User = require('../models/user');
 User = new User();
 
@@ -62,14 +66,19 @@ module.exports = function(app, express) {
           if (error) {
             console.log('err: ', error);
           } else {
-            var userObj = JSON.parse(body);
-            userObj.site_Admin = Number(userObj.site_Admin);
-            userObj.hireable = Number(userObj.hireable);
-            User.getUserAsync(body.id)
+            var userObj = utils.formatUserObj(JSON.parse(body));
+
+            User.getUserAsync(userObj.id)
             .then(function(user) {
               if (user.length === 0) {
-                console.log('no user');
-                User.makeNewUser(userObj);
+                console.log('no user: ', user);
+                User.makeNewUser(userObj)
+                .then(function(data) {
+                  console.log('pass new user: ', data);
+                })
+                .catch(function(data) {
+                  console.log('fail new user: ', data);
+                });
               } else {
                 console.log('yes user');
               }
