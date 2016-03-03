@@ -2,10 +2,10 @@ const React = require('react');
 const NavBar = require('./nav/NavBar'); 
 const Issues = require('../js/issues');
 const Repos = require('../js/repos'); 
-const Users = requrie('../js/users');
+const Users = require('../js/users');
 
 const linksList = [
-  {name: "my profile", url: '/profile'}
+  {name: "my profile", url: '/profile'},
   {name: "tickets", url: '/'},
   {name: "repositories", url: '/repos'},
   {name: "getting started", url: '/resources'},

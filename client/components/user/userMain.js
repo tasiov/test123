@@ -23,7 +23,7 @@ class UserProfile extends React.Component {
         <div className="col s12 m5">
           <UserRepoList favorites={this.props.favorites.results}/>
         </div>
-      <div>
+      </div>
     )
   }
 }
