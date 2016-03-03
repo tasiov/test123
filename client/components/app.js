@@ -89,7 +89,7 @@ const App = class App extends React.Component {
                 "id": 1,
                 "avatar_url": "https://avatars3.githubusercontent.com/u/13843284?v=3&s=460",
                 "gravatar_id": "",
-                "url": "https://api.github.com/users/octocat",
+                "url": "https://avatars3.githubusercontent.com/u/13843284?v=3&s=460",
                 "html_url": "https://github.com/octocat",
                 "followers_url": "https://api.github.com/users/octocat/followers",
                 "following_url": "https://api.github.com/users/octocat/following{/other_user}",
