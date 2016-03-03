@@ -1,4 +1,7 @@
 var request = require('request');
+var config = require('../config');
+var User = require('../models/user');
+User = new User();
 
 var Issues = require('../models/issues');
 Issues = new Issues();
@@ -43,11 +46,11 @@ module.exports = function(app, express) {
     // Make initial request to GitHub OAuth for access token
     request({
       url: 'https://github.com/login/oauth/access_token',
-      qs: {client_id: '139d346c12b54d57adc5', client_secret: '3ac7e46e12540f1b1c743db3a52e006fe7116bbd', code: req.query.code},
+      qs: {client_id: config.githubClientId, client_secret: config.githubSecret, code: req.query.code},
       method: 'POST'
     }, function(error, response, body) {
       if(error) {
-        console.log(error);
+        console.log('err: ', error);
       } else {
         access_token = body;
 
@@ -57,9 +60,23 @@ module.exports = function(app, express) {
           headers: {'User-Agent': 'Good-First-Ticket'}
         }, function(error, response, body) {
           if (error) {
-            console.log(error);
+            console.log('err: ', error);
           } else {
-            console.log('body: ', body);
+            var userObj = JSON.parse(body);
+            userObj.site_Admin = Number(userObj.site_Admin);
+            userObj.hireable = Number(userObj.hireable);
+            User.getUserAsync(body.id)
+            .then(function(user) {
+              if (user.length === 0) {
+                console.log('no user');
+                User.makeNewUser(userObj);
+              } else {
+                console.log('yes user');
+              }
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
           }
         });
       }
