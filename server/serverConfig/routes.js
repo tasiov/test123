@@ -1,10 +1,10 @@
 var request = require('request');
 
-var Issues = require('./models/issues');
+var Issues = require('../models/issues');
 Issues = new Issues();
-var Repos = require('./models/repos');
+var Repos = require('../models/repos');
 Repos = new Repos();
-var User = require('./models/user');
+var User = require('../models/user');
 User = new User();
 
 module.exports = function(app, express) {
