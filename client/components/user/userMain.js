@@ -8,8 +8,6 @@ class UserProfile extends React.Component {
     super(props);
   }
 
-  
-
    componentDidUpdate () {
     //Anytime the component renders, scroll to the top of the ticket list
     $('.main-user-profile')[0].scrollTop = 0;

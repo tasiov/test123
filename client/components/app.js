@@ -9,8 +9,7 @@ const linksList = [
   {name: "tickets", url: '/'},
   {name: "repositories", url: '/repos'},
   {name: "getting started", url: '/resources'},
-]
-
+];
 
 const App = class App extends React.Component {
   
