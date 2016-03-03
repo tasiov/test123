@@ -22,7 +22,7 @@ User.prototype.getUserAsync = function(userHandle) {
 
 User.prototype.updateUserAsync = function(userObj) {
   let userQuery = Object.keys(userObj).reduce((prev, key, index, coll) => {
-    prev = prev + key + '=' + userObj(key);
+    prev = prev + key + '="' + userObj(key) + '"';
     return index !== (coll.length -1) ? prev + ',' : prev;
   }, "");
 
