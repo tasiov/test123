@@ -49,6 +49,17 @@ module.exports = function(app, express) {
       })
     })
 
+  // Kills the user session on logout
+  app.get('/logout', function(req, res) {
+    if(req.session.user) {
+      req.session.destroy(function(err){
+        res.send('You have been logged out.');
+      });
+    } else {
+      res.send('You are already logged out.');
+    }
+  });
+
   // GitHub redirects user to /login/auth endpoint after login
   app.get('/login/auth', function(req, res) {
     req.session.user = true;
