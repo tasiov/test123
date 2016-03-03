@@ -105,6 +105,12 @@ CREATE TABLE pulls (
   ON DELETE CASCADE
 );
 
-
+CREATE TABLE repos_users (
+  internal_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT not null,
+  repo_id INT not null,
+  FOREIGN KEY (user_id) REFERENCES users(internal_id) ON DELETE CASCADE,
+  FOREIGN KEY (repo_id) REFERENCES repos(internal_id) ON DELETE CASCADE
+);
 
 CREATE INDEX OrgRepo ON repos (name ,org_name);
