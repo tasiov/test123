@@ -40,9 +40,16 @@ module.exports = function(app, express) {
       });
     });
 
+  app.route('/api/send-favorite')
+    .post(function(req, res) {
+      console.log(req);
+      res.send('received');
+    })
+
 
   app.route('/api/user')
     .get(function(req, res){
+      console.log('getting user');
       User.getUserAsync(req.session.userHandle)
       .then((userObj) => {
         res.send(userObj);
