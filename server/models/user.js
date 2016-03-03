@@ -2,6 +2,7 @@
 const Promise = require('bluebird');
 var db = require('../db/database');
 var _ = require('lodash');
+var RowDataPacket = require('node-mysql');
 
 var User = function() {
  this._user = {};
@@ -13,7 +14,9 @@ User.prototype.getUserAsync = function(userHandle) {
   } else {
   return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
            .then((results) => {
-              this._user = results[0];
+              Object.keys(results[0][0]).forEach((key) => {
+                this._user[key] = results[0][0][key];
+              });
               return this._user;
            });
   }
