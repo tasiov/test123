@@ -2,16 +2,7 @@ var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var config = require('../config');
-
-var unless = function(path, middleware) {
-  return function(req, res, next) {
-    if (path === req.path) {
-      return next();
-    } else {
-      return middleware(req, res, next);
-    }
-  };
-};
+var utils = require('./utils');
 
 module.exports = function(app, express) {
   app.use(morgan('dev'));
@@ -24,9 +15,8 @@ module.exports = function(app, express) {
     saveUninitialized: false
   }));
 
-  app.use(unless('/login/auth', function (req, res, next) {
+  app.use(utils.unless('/login/auth', function (req, res, next) {
     if (req.session.user) {
-      console.log('User session: ', req.session.user);
       next();
     } else {
       /* If there is no active user session, redirect the client to the
