@@ -43,6 +43,16 @@ module.exports = function(app, express) {
       });
     });
 
+
+  app.route('/api/user')
+    .get(function(req, res){
+      User.getUserAsync(req.session.userHandle)
+      .then((userObj) => {
+        res.send(userObj);
+      })
+    })
+
+  // GitHub redirects user to /login/auth endpoint after login
   app.get('/login/auth', function(req, res) {
     req.session.user = true;
 
