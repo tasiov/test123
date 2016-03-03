@@ -17,7 +17,10 @@ class UserProfile extends React.Component {
   	let user = this.props.user;
     return (
       <div className="row main-user-profile">
-        <div className="col s12 m7">
+        <div className="col s12 m6">
+          <UserCard user={this.props.userTest}/>
+        </div>
+          <div className="col s12 m6">
           <UserCard user={this.props.user}/>
         </div>
         <div className="col s12 m5">

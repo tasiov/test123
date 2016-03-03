@@ -25,13 +25,22 @@ const App = class App extends React.Component {
       languages: []
     };
   }
+
+  getUser(){
+    var self = this;
+    Users.getUserFromApi((result) => {
+      console.log(result);
+      self.setState({user:result});
+    }, (result) => {
+      console.log("Err",result)
+    })
+  }
   
   getIssues(searchTerm, language){
     //Fetch issues;
     var self = this;
 
     Issues.getIssues(function(data) {
-      console.log(data);
       self.setState({
         numberOfTickets: data.length,
         ticketsToRender: data.slice(0,199)
@@ -65,6 +74,7 @@ const App = class App extends React.Component {
     this.getIssues();
     this.getRepos();
     this.setLanguages();
+    this.getUser();
   }
 
   render () {
@@ -83,7 +93,8 @@ const App = class App extends React.Component {
               languages: this.state.languages,
               getIssues: this.getIssues.bind(this),
               getRepos: this.getRepos.bind(this),
-              user: {
+              user: this.state.user,
+              userTest: {
                 "login": "octocat",
                 "id": 1,
                 "avatar_url": "https://avatars3.githubusercontent.com/u/13843284?v=3&s=460",
