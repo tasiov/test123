@@ -15,11 +15,13 @@ Pulls.prototype.getUserIdAsync = function(userHandle) {
 }
 
 Pulls.prototype.makePullByUserAsync = function(pull) {
-	return this.getUserIdAsync(pull.user)
+	let userHandle = pull.user
+	delete pull.user
+
+	return this.getUserIdAsync(userHandle)
 	.then((user_id) => {
 		pull.user_id = user_id;
 		pull.closed = Number(pull.closed);
-		delete pull.user;
 		this._pulls.push(pull);
 
 	  let pullKeys = [];
@@ -30,22 +32,27 @@ Pulls.prototype.makePullByUserAsync = function(pull) {
 	  })
 
 	  return db.raw(`INSERT INTO pulls ( ${pullKeys.join()} ) VALUES (${pullVals.join()})`)
-	  .then(() => this._pulls)
+	  .then(() => this.getPullsByUserAsync(userHandle, true))
 	  .catch(console.log);
 	});
 }
  
 
-Pulls.prototype.getPullsByUserAsync = function (userHandle) {
-		if (this._pulls.length !== 0 && !(userHandle)) {
+Pulls.prototype.getPullsByUserAsync = function (userHandle, forceUpdate) {
+		if (this._pulls.length !== 0 && !(forceUpdate)) {
 		  return new Promise((resolve) => resolve(this._pulls));
 		} else {
 			return this.getUserIdAsync(userHandle)
 		  .then( (userId) => {
 		  	return db.raw(`SELECT * FROM pulls WHERE user_id='${userId}';`)
 		          .then((results) => {
-		          	this._pulls = results[0]
-		          	return this._pulls
+		          	var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
+		          	this._pulls = RowDataArray.map(RowData => {
+		          	  var regObj = {};
+		          	  Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
+		          	  return regObj;
+		          	})
+		          	return this._pulls;
 		          })
 		          .catch(console.log);
 		  });

@@ -49,7 +49,7 @@ User.prototype.makeNewUserAsync = function(user) {
        })
       return db.raw(`INSERT INTO users ( ${userKeys.join()} ) VALUES (${userVals.join()})`)
         .then((results) => {
-          this.getUserAsync(user.login);
+          this.getUserAsync(user.login, true);
         });
     }
   }
