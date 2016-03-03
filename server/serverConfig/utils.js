@@ -34,6 +34,8 @@ module.exports.getAccessToken = function(code, callback) {
   });
 };
 
+// getUserInfo uses the access_token for the session user
+// to get the user data from the github API
 module.exports.getUserInfo = function(token, callback) {
   var requestParams = {
     url: 'https://api.github.com/user?' + token,
