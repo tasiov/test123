@@ -7,13 +7,15 @@ var User = function() {
  this._user = {};
 };
 
-User.prototype.getUserAsync = function(userHandle) {
-  if ( this._user.login ) {
+User.prototype.getUserAsync = function(userHandle, forceUpdate) {
+  if ( this._user.login && !forceUpdate ) {
     return new Promise((resolve) => resolve(this._user));
   } else {
   return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
            .then((results) => {
-              this._user = results[0];
+              Object.keys(results[0][0]).forEach((key) => {
+                this._user[key] = results[0][0][key];
+              });
               return this._user;
            });
   }
@@ -28,7 +30,7 @@ User.prototype.updateUserAsync = function(userObj) {
 
   return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
   .then( () => {
-    return this.getUserAsync(userObj.login);
+    return this.getUserAsync(userObj.login, true);
   });
 }
 
@@ -45,11 +47,9 @@ User.prototype.makeNewUserAsync = function(user) {
         userKeys.push( key + '');
         userVals.push( '"' + val + '"');
        })
-      return db.raw(`INSERT INTO users ( ${userKeys.join()} )
-      VALUES (${userVals.join()})`)
+      return db.raw(`INSERT INTO users ( ${userKeys.join()} ) VALUES (${userVals.join()})`)
         .then((results) => {
-          this._user = results[0];
-          return this._user;
+          this.getUserAsync(user.login);
         });
     }
   }
