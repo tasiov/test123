@@ -20,8 +20,20 @@ User.prototype.getUserAsync = function(userHandle) {
 
 }
 
-User.prototype.makeNewUser = function(user) {
+User.prototype.updateUserAsync = function(userObj) {
+  let userQuery = Object.keys(userObj).reduce((prev, key, index, coll) => {
+    prev = prev + key + '=' + userObj(key);
+    return index !== (coll.length -1) ? prev + ',' : prev;
+  }, "");
 
+  return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
+  .then( () => {
+    return this.getUserAsync(userObj.login);
+  });
+}
+
+
+User.prototype.makeNewUser = function(user) {
   if ( this._user.id ) {
     return new Promise((resolve) => resolve("You are already signed in."));
   } else {
@@ -34,7 +46,6 @@ User.prototype.makeNewUser = function(user) {
         userKeys.push( key + '');
         userVals.push( '"' + val + '"');
        })
-
       return db.raw(`INSERT INTO users ( ${userKeys.join()} )
       VALUES (${userVals.join()})`)
         .then((results) => {
@@ -43,7 +54,6 @@ User.prototype.makeNewUser = function(user) {
         });      
     }
   }
-  
 }
 
 
