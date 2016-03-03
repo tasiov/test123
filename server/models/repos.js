@@ -17,7 +17,6 @@ Repos.prototype.getRepos = function () {
     return db.raw(`select * from repos`)
             .then((results) => {
               var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
-              console.log(RowDataArray[0]);
               this._repos = RowDataArray.map(RowData => {
                 var regObj = {};
                 Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
