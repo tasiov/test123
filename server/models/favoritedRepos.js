@@ -4,8 +4,8 @@ const Promise = require('bluebird');
 var db = require('../db/database');
 var _ = require('lodash');
 
-var StarredRepos = function() {
-	this._starredRepos = [];
+var FavoritedRepos = function() {
+	this._favoritedRepos = [];
 }
 
 let dbJoinTableQuery = `users INNER JOIN repos_users 
@@ -13,20 +13,20 @@ let dbJoinTableQuery = `users INNER JOIN repos_users
 												INNER JOIN repos
 													ON repos_users.repo_id = repos.internal_id`
 
-StarredRepos.prototype.getStarredReposAsync = function(userHandle, forceRefresh) {
+FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefresh) {
   if (!forceRefresh && this._user.login) {
-  return new Promise((resolve) => resolve(this._starredRepos));
+  return new Promise((resolve) => resolve(this._favoritedRepos));
   } else {
   return db.raw(`SELECT repos.name FROM ${dbJoinTableQuery} 
   							WHERE users.login = '${userHandle}'`)
            .then((results) => {
-              this._starredRepos = results[0];
-              return this._starredRepos;
+              this._favoritedRepos = results[0];
+              return this._favoritedRepos;
            }); 
   }
 }
 
-StarredRepos.prototype.insertStarredRepoUser = function(gitRepoId, userHandle) {
+FavoritedRepos.prototype.insertFavoritedRepoAsync = function(gitRepoId, userHandle) {
 	return Promise.all([
 			db.raw(`SELECT internal_id FROM repos WHERE id = ${gitRepoId};`),
 			db.raw(`SELECT internal_id FROM users WHERE login = '${userHandle}';`)
@@ -36,9 +36,9 @@ StarredRepos.prototype.insertStarredRepoUser = function(gitRepoId, userHandle) {
 			return db.raw(`INSERT INTO repos_users (repo_id, user_id) 
 							VALUES (${repoInternalId}, ${userInternalId});`)
 							.then( () => {
-								return this.getStarredReposAsync(userHandle, true);
+								return this.getFavoritedReposAsync(userHandle, true);
 							});
 		});
 }
 
-module.exports = StarredRepos;
+module.exports = FavoritedRepos;
