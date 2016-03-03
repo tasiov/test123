@@ -1,5 +1,5 @@
-// const serverUrl = 'http://localhost:3000';
-const serverUrl = 'http://45.55.29.22:3000';
+const serverUrl = 'http://localhost:3000';
+//const serverUrl = 'http://45.55.29.22:3000';
 const $ = require('jquery');
 
 module.exports = {};
