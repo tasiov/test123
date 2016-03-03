@@ -1,48 +1,27 @@
 const React = require('react');
- 
+const UserCard = require('./UserCard.js');
+const UserRepoList = require('./UserFavoriteList.js');
+
 class UserProfile extends React.Component {
   
   constructor(props) {
     super(props);
   }
 
-  
-
    componentDidUpdate () {
     //Anytime the component renders, scroll to the top of the ticket list
     $('.main-user-profile')[0].scrollTop = 0;
   }
-
+ 	
   render() {
   	let user = this.props.user;
     return (
       <div className="row main-user-profile">
         <div className="col s12 m7">
-          <div className="card">
-            <div className="card-image">
-              <img src={user.avatar_url}/>
-              <h3 className="card-title">
-
-              	<p>{user.name}</p>
-              	<div className="chip">
-              	  Lv.{user.game_level}
-              	</div>
-              	<div className="chip">
-              	  <i className="material-icons">done</i>
-              	  {user.game_tickets_completed}
-              	</div>
-
-              </h3>
-            </div>
-            <div className="card-content">
-              <p>{`${user.company}, ${user.location}`}</p>
-              <p>{user.email}</p>
-              <p>{user.bio}</p>
-            </div>
-            <div className="card-action">
-              <a href={user.url}>Github</a>
-            </div>
-          </div>
+          <UserCard user={this.props.user}/>
+        </div>
+        <div className="col s12 m5">
+          <UserRepoList favorites={this.props.favorites.results}/>
         </div>
       </div>
     )
