@@ -67,11 +67,11 @@ module.exports = function(app, express) {
             }).catch(utils.logError);
           } else {
             // If user is currently in db, update user data
-            // User.updateUserAsync(userObj)
-            // .then(function(data) {
-            //   console.log('user updated: ', data);
-            // })
-            // .catch(utils.logError);
+            User.updateUserAsync(userObj)
+            .then(function(data) {
+              console.log('user updated: ', data);
+            })
+            .catch(utils.logError);
           }
         }).catch(utils.logError);
       }).catch(utils.logError);
