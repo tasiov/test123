@@ -2,7 +2,6 @@
 const Promise = require('bluebird');
 var db = require('../db/database');
 var _ = require('lodash');
-var RowDataPacket = require('node-mysql');
 
 var User = function() {
  this._user = {};
@@ -48,11 +47,9 @@ User.prototype.makeNewUserAsync = function(user) {
         userKeys.push( key + '');
         userVals.push( '"' + val + '"');
        })
-      return db.raw(`INSERT INTO users ( ${userKeys.join()} )
-      VALUES (${userVals.join()})`)
+      return db.raw(`INSERT INTO users ( ${userKeys.join()} ) VALUES (${userVals.join()})`)
         .then((results) => {
-          this._user = results[0];
-          return this._user;
+          this.getUserAsync(user.login);
         });
     }
   }
