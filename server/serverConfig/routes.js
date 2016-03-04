@@ -11,6 +11,8 @@ var Repos = require('../models/repos');
 Repos = new Repos();
 var User = require('../models/user');
 User = new User();
+var FaveRepos = require('../models/favoritedRepos');
+FaveRepos = new FaveRepos();
 
 module.exports = function(app, express) {
 
@@ -42,9 +44,12 @@ module.exports = function(app, express) {
 
   app.route('/api/send-favorite')
     .post(function(req, res) {
-      console.log(req);
-      res.send('received');
-    })
+      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.session.userHandle)
+      .then( () => {
+        console.log(req.body.id, req.session.userHandle);
+        res.send('received');
+      });
+    });
 
 
   app.route('/api/user')
