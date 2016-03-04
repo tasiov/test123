@@ -21,7 +21,7 @@ class UserProfile extends React.Component {
           <UserCard user={this.props.user}/>
         </div>
         <div className="col s12 m5">
-          <UserRepoList favorites={this.props.favorites.results}/>
+          <UserRepoList favorites={this.props.favedRepos}/>
         </div>
       </div>
     )

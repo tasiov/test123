@@ -16,7 +16,7 @@ class UserFavoriteList extends React.Component {
         </div>
         <div className="collapsible-body">
           <p> {this.props.data.org_name}<br/>
-          {this.props.data.descrption}<br/>
+          {this.props.data.description}<br/>
           <a href={this.props.data.html_url}>GITHUB</a>
           </p>
         </div>
