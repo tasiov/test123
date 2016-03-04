@@ -76,6 +76,7 @@ module.exports = function(app, express) {
         // Format user object so that it can be consumed by mysql
         var userObj = utils.formatUserObj(JSON.parse(result.body));
         req.session.userHandle = userObj.login;
+        req.session.save(utils.logError);
 
         // Check if current user exists in the db
         User.getUserAsync(userObj.login)
