@@ -13,10 +13,12 @@ User.prototype.getUserAsync = function(userHandle, forceUpdate) {
   } else {
   return db.raw(`SELECT * FROM users WHERE login='${userHandle}'`)
            .then((results) => {
+            if(results[0][0]){
               Object.keys(results[0][0]).forEach((key) => {
                 this._user[key] = results[0][0][key];
               });
-              return this._user;
+            }
+            return this._user;
            });
   }
 
@@ -39,7 +41,7 @@ User.prototype.makeNewUserAsync = function(user) {
     return new Promise((resolve) => resolve("You are already signed in."));
   } else {
     if(user.id && user.login) {
-
+      console.log("Making new user:" , user.login );
       // Function to map user properties to usable SQL strings
       let userKeys = [];
       let userVals = [];
