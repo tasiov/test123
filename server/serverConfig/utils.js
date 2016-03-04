@@ -13,10 +13,6 @@ module.exports.unless = function(path, middleware) {
   };
 };
 
-module.exports.logError = function(err) {
-  console.log('error: ', err);
-};
-
 // getAccessToken takes the code retrieved from GitHub
 // and uses it to get the access token from the gitHub oauth endpoint
 module.exports.getAccessToken = function(code, callback) {

@@ -114,17 +114,18 @@ module.exports = function(app, express) {
             .then(function(data) {
               console.log('new user created in db: ', data);
               res.redirect('/')
-            }).catch(utils.logError);
+            }).catch(console.log);
           } else {
 
             // If user is currently in db, update user data
             User.updateUserAsync(userObj)
             .then(function(data) {
+              console.log('updated user in db: ', data);
               res.redirect('/')
-            }).catch(utils.logError);
+            }).catch(console.log);
           }
-        }).catch(utils.logError);
-      }).catch(utils.logError);
-    }).catch(utils.logError);
+        }).catch(console.log);
+      }).catch(console.log);
+    }).catch(console.log);
   });
 }
