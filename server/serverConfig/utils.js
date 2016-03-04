@@ -78,18 +78,27 @@ module.exports.getPullRequests = function(userHandle, repo, owner, callback) {
       callback(error, null);
     } else {
       pullsArray = JSON.parse(response.body);
-      var userPullReqs = {open: [], closed: []};
-
+      var userPullReqs = [];
       _.forEach(pullsArray, function(pullObj) {
         if (pullObj.user.login === userHandle) {
-          if (pullObj.state === "open") {
-            userPullReqs.open.push(pullObj);
-          } else if (pullObj.state === "closed") {
-            userPullReqs.closed.push(pullObj);
-          }
+          userPullReqs.push(pullObj);
         }
       });
       callback(null, userPullReqs);
     }
   });
+};
+
+// transforms the 'pullsObj' into an object that
+// can be consumed by our mysql db
+module.exports.formatPulls = function(pullsArr) {
+  var formattedArr = [];
+  _.forEach(pullsArr, function(obj) {
+    var pullObj = {
+      name: obj.title,
+      merged: obj.merged !== ""
+    }
+    formattedArr.push(pullObj);
+  });
+  return formattedArr;
 };

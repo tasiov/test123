@@ -1,5 +1,6 @@
 var request = require('request');
 var config = require('../config');
+var _ = require('lodash');
 
 var utils = require('./utils');
 var Promise = require('bluebird');
@@ -13,6 +14,8 @@ var User = require('../models/user');
 User = new User();
 var FaveRepos = require('../models/favoritedRepos');
 FaveRepos = new FaveRepos();
+var Pulls = require('../models/pulls');
+Pulls = new Pulls();
 
 module.exports = function(app, express) {
 
@@ -78,9 +81,8 @@ module.exports = function(app, express) {
   // Kills the user session on logout
   app.get('/logout', function(req, res) {
     if(req.session.user) {
-      req.session.destroy(function(err){
-        res.send('You have been logged out.');
-      });
+      req.session.destroy(console.log);
+      res.redirect('https://github.com/logout');
     } else {
       res.send('You are already logged out.');
     }
@@ -127,5 +129,21 @@ module.exports = function(app, express) {
         }).catch(console.log);
       }).catch(console.log);
     }).catch(console.log);
+  });
+
+  app.get('/repo/pulls', function(req, res) {
+    // example request url:
+    //    http://localhost:3000/repo/pulls?repo=DapperArgentina&owner=photogenic-wound
+    utils.getPullRequestsAsync(req.session.userHandle, req.query.repo, req.query.owner)
+    .then(function(data) {
+      var pulls = utils.formatPulls(data);
+      _.forEach(pulls, function(pull) {
+        Pulls.makePullByUserAsync(pull, req.session.userHandle);
+      });
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+    res.send('pulls');
   });
 }
