@@ -16,13 +16,15 @@ class RepoList extends React.Component {
   render () {
     //for really clean scrolling, we could do something like below to calculate the max height and then set the max height css 
     // var maxHeight = $(window).height() - $('.navbar').outerHeight() - margin * 2;
+    
     return (
+
     <div >
       <RepoSearch searchHandler={this.props.getRepos} languages={this.props.languages} />
       <h4>{this.props.numberOfRepos} repositories</h4>
       <div className="main-repo-view">
         {this.props.reposToRender.map ((repo, index) => 
-          <RepoEntry data={repo} key={index} />
+          <RepoEntry data={repo} key={index} favedRepos={this.props.favedRepos} getFavedRepos={this.props.getFavedRepos} />
         )}
       </div>
     </div>
