@@ -16,3 +16,13 @@ module.exports.getFavedReposFromApi = function (successCallback, errCallback) {
   $.ajax(options);  
 };
 
+module.exports.deleteFavedReposFromApi = function (successCallback, errCallback) {
+  var options = {
+    url: serverUrl + '/api/favorite',
+    type: 'GET',
+    success: successCallback,
+    error: errCallback
+  };
+
+  $.ajax(options);  
+};

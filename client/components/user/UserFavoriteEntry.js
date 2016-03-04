@@ -12,7 +12,7 @@ class UserFavoriteList extends React.Component {
       <li >
         <div className="collapsible-header">
           <span>{this.props.data.name}</span>
-          <a href="#!" className="right"><i className="material-icons">loyalty</i></a>
+          <a href="#!" className="right" onClick=""><i className="material-icons">loyalty</i></a>
         </div>
         <div className="collapsible-body">
           <p> {this.props.data.org_name}<br/>
