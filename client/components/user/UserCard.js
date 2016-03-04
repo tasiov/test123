@@ -44,8 +44,8 @@ class UserCard extends React.Component {
             </div>
             <div className="card-action">
               <div className="row">
-                <button href="/"className="waves-effect waves-teal btn-flat" onClick={logMeOut}>LOGOUT</button>
-                <a href={user.url} className="right waves-effect waves-yellow btn-flat">Github</a>
+                <button className="waves-effect waves-teal btn-flat" onClick={logMeOut}>LOGOUT</button>
+                <a href={user.html_url} className="right waves-effect waves-yellow btn-flat">Github</a>
               </div>
             </div>
           </div>
