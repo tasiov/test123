@@ -76,6 +76,7 @@ module.exports = function(app, express) {
         // Format user object so that it can be consumed by mysql
         var userObj = utils.formatUserObj(JSON.parse(result.body));
         req.session.userHandle = userObj.login;
+        req.session.save(utils.logError);
 
         // Check if current user exists in the db
         User.getUserAsync(userObj.login)
@@ -86,18 +87,18 @@ module.exports = function(app, express) {
             User.makeNewUserAsync(userObj)
             .then(function(data) {
               console.log('new user created in db: ', data);
+              res.redirect('/')
             }).catch(utils.logError);
           } else {
 
             // If user is currently in db, update user data
             User.updateUserAsync(userObj)
             .then(function(data) {
+              res.redirect('/')
             }).catch(utils.logError);
           }
         }).catch(utils.logError);
       }).catch(utils.logError);
     }).catch(utils.logError);
-
-    res.redirect('/');
   });
 }
