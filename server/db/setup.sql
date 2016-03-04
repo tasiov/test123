@@ -98,7 +98,7 @@ CREATE TABLE users (
 
 CREATE TABLE pulls (
  internal_id INT AUTO_INCREMENT PRIMARY KEY,
- closed BOOLEAN not null,
+ merged BOOLEAN not null,
  name nvarchar(100) not null,
  user_id INT not null,
  FOREIGN KEY (user_id)

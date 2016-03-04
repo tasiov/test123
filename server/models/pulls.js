@@ -5,7 +5,7 @@ var _ = require('lodash');
 
 var Pulls = function() {
 	this._pulls = [];
-} 
+}
 
 Pulls.prototype.getUserIdAsync = function(userHandle) {
 		return db.raw(`SELECT internal_id FROM users WHERE login='${userHandle}';`)
@@ -14,14 +14,12 @@ Pulls.prototype.getUserIdAsync = function(userHandle) {
 	  });
 }
 
-Pulls.prototype.makePullByUserAsync = function(pull) {
-	let userHandle = pull.user
-	delete pull.user
+Pulls.prototype.makePullByUserAsync = function(pull, userHandle) {
 
 	return this.getUserIdAsync(userHandle)
 	.then((user_id) => {
 		pull.user_id = user_id;
-		pull.closed = Number(pull.closed);
+		pull.merged = Number(pull.merged);
 		this._pulls.push(pull);
 
 	  let pullKeys = [];
@@ -36,7 +34,7 @@ Pulls.prototype.makePullByUserAsync = function(pull) {
 	  .catch(console.log);
 	});
 }
- 
+
 
 Pulls.prototype.getPullsByUserAsync = function (userHandle, forceUpdate) {
 		if (this._pulls.length !== 0 && !(forceUpdate)) {
