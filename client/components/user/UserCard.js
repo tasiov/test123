@@ -1,5 +1,6 @@
 const React = require('react');
 const _ = require('lodash');
+const User = require('../../js/users.js');
 
 class UserCard extends React.Component {
   
@@ -12,6 +13,11 @@ class UserCard extends React.Component {
     user = _.each(user,(val, key) => {
         user[key] = val === null || val === "null" ? "" : val;
     });
+
+    let logMeOut = () => {
+      console.log("button fired");
+      User.logout();
+    };
 
     console.log(user);
   	return(
@@ -37,7 +43,10 @@ class UserCard extends React.Component {
               <p>{user.bio}</p>
             </div>
             <div className="card-action">
-              <a href={user.url}>Github</a>
+              <div className="row">
+                <button href="/"className="waves-effect waves-teal btn-flat" onClick={logMeOut}>LOGOUT</button>
+                <a href={user.url} className="right waves-effect waves-yellow btn-flat">Github</a>
+              </div>
             </div>
           </div>
   	);

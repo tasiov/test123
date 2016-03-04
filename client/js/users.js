@@ -15,3 +15,12 @@ module.exports.getUserFromApi = function (successCallback, errCallback) {
   $.ajax(options); 
 };
 
+module.exports.logout = function() {
+  var options = {
+    url: serverUrl + '/logout',
+    type: 'GET',
+  };
+ 
+  $.ajax(options); 
+};
+

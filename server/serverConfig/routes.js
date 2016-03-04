@@ -79,9 +79,14 @@ module.exports = function(app, express) {
   app.get('/logout', function(req, res) {
     if(req.session.user) {
       req.session.destroy(function(err){
+        console.log("session destroyed");
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
         res.send('You have been logged out.');
       });
     } else {
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
       res.send('You are already logged out.');
     }
   });
