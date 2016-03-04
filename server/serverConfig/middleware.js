@@ -24,7 +24,7 @@ module.exports = function(app, express) {
        */
       var ghAuthUrl = 'https://github.com/login/oauth/authorize?client_id='
        + config.githubClientId
-       + '&redirect_uri=http://localhost:3000/login/auth';
+       + '&redirect_uri=http://104.236.168.119:3000/login/auth';
       res.redirect(ghAuthUrl);
     }
   }));
