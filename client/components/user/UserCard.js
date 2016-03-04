@@ -1,4 +1,5 @@
 const React = require('react');
+const _ = require('lodash');
 
 class UserCard extends React.Component {
   
@@ -8,6 +9,11 @@ class UserCard extends React.Component {
 
   render() {
   	let user = this.props.user;
+    user = _.each(user,(val, key) => {
+        user[key] = val === null || val === "null" ? "" : val;
+    });
+
+    console.log(user);
   	return(
 		<div className="card">
             <div className="card-image">

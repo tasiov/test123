@@ -81,25 +81,24 @@ module.exports = function(app, express) {
         // Check if current user exists in the db
         User.getUserAsync(userObj.login)
         .then(function(user) {
-          if (user.length === 0) {
 
+          if (user.login === undefined) {
             // If user is not in db, insert new user
             User.makeNewUserAsync(userObj)
             .then(function(data) {
               console.log('new user created in db: ', data);
+              res.redirect('/')
             }).catch(utils.logError);
           } else {
 
             // If user is currently in db, update user data
             User.updateUserAsync(userObj)
             .then(function(data) {
-              console.log('user updated: ', data);
+              res.redirect('/')
             }).catch(utils.logError);
           }
         }).catch(utils.logError);
       }).catch(utils.logError);
     }).catch(utils.logError);
-
-    res.redirect('/');
   });
 }
