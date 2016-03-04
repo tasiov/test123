@@ -102,36 +102,36 @@ const App = class App extends React.Component {
               getFavedRepos: this.getFavedRepos.bind(this),
               user: this.state.user,
               favedRepos: this.state.favedRepos,
-              favorites: { "results": [
-                {
-                  "name":"test name 1",
-                  "org_name":"org test name 1",
-                  "html_url":"#",
-                  "description":"test description 1",
-                  "language":"javascript"
-                },
-                {
-                  "name":"test name 2",
-                  "org_name":"org test name 2",
-                  "html_url":"#",
-                  "description":"test description 2",
-                  "language":"javascript"
-                },
-                {
-                  "name":"test name 3",
-                  "org_name":"org test name 3",
-                  "html_url":"#",
-                  "description":"test description 3",
-                  "language":"javascript"
-                },
-                {
-                  "name":"test name 4",
-                  "org_name":"org test name 4",
-                  "html_url":"#",
-                  "description":"test description 4",
-                  "language":"javascript"
-                }
-              ]}
+              // favorites: { "results": [
+              //   {
+              //     "name":"test name 1",
+              //     "org_name":"org test name 1",
+              //     "html_url":"#",
+              //     "description":"test description 1",
+              //     "language":"javascript"
+              //   },
+              //   {
+              //     "name":"test name 2",
+              //     "org_name":"org test name 2",
+              //     "html_url":"#",
+              //     "description":"test description 2",
+              //     "language":"javascript"
+              //   },
+              //   {
+              //     "name":"test name 3",
+              //     "org_name":"org test name 3",
+              //     "html_url":"#",
+              //     "description":"test description 3",
+              //     "language":"javascript"
+              //   },
+              //   {
+              //     "name":"test name 4",
+              //     "org_name":"org test name 4",
+              //     "html_url":"#",
+              //     "description":"test description 4",
+              //     "language":"javascript"
+              //   }
+              // ]}
           })}
         </div>
       </div>

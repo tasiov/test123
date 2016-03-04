@@ -15,3 +15,16 @@ module.exports.getUserFromApi = function (successCallback, errCallback) {
   $.ajax(options); 
 };
 
+module.exports.logout = function() {
+  var options = {
+    url: serverUrl + '/logout',
+    type: 'GET',
+    beforeSend: function(xhr){
+    	xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+    	xhr.setRequestHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    }
+  };
+ 
+  $.ajax(options); 
+};
+
