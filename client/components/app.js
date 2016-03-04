@@ -3,6 +3,7 @@ const NavBar = require('./nav/NavBar');
 const Issues = require('../js/issues');
 const Repos = require('../js/repos'); 
 const Users = require('../js/users');
+const FavedRepos = require('../js/favedRepos');
 
 const linksList = [
   {name: "my profile", url: '/profile'},
@@ -22,15 +23,14 @@ const App = class App extends React.Component {
       reposToRender: [],
       numberOfRepos: 0,
       numberOfTickets: 0,
-      languages: []
+      languages: [],
+      favedRepos: {}
     };
   }
 
   getUser(){
-    var self = this;
     Users.getUserFromApi((result) => {
-      console.log(result);
-      self.setState({user:result});
+      this.setState({user:result});
     }, (result) => {
       console.log("Err",result)
     })
@@ -38,10 +38,8 @@ const App = class App extends React.Component {
   
   getIssues(searchTerm, language){
     //Fetch issues;
-    var self = this;
-
-    Issues.getIssues(function(data) {
-      self.setState({
+    Issues.getIssues((data) => {
+      this.setState({
         numberOfTickets: data.length,
         ticketsToRender: data.slice(0,199)
       });
@@ -51,13 +49,20 @@ const App = class App extends React.Component {
   getRepos(searchTerm, language){
     //Fetch repos;
     //refactor to exclude 'self/this' with es6 syntax?
-    var self = this;
-    Repos.getRepos(function(data) {
-      self.setState({
+    Repos.getRepos((data) => {
+      this.setState({
         numberOfRepos: data.length,
         reposToRender: data.slice(0,199)
       });
     }, console.log, searchTerm, language);
+  }
+
+  getFavedRepos() {
+    FavedRepos.getFavedReposFromApi((data) => {
+      this.setState({
+        favedRepos: data
+      });
+    }, console.log)
   }
 
   setLanguages () {
@@ -75,6 +80,7 @@ const App = class App extends React.Component {
     this.getRepos();
     this.setLanguages();
     this.getUser();
+    this.getFavedRepos();
   }
 
   render () {
@@ -94,6 +100,7 @@ const App = class App extends React.Component {
               getIssues: this.getIssues.bind(this),
               getRepos: this.getRepos.bind(this),
               user: this.state.user,
+              favedRepos: this.state.favedRepos,
               favorites: { "results": [
                 {
                   "name":"test name 1",
