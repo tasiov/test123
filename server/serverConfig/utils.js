@@ -61,3 +61,7 @@ module.exports.formatUserObj = function(userObj) {
   formatObj.updated_at = new Date(formatObj.updated_at).toISOString().slice(0, 19).replace('T', ' ');
   return formatObj;
 }
+
+module.exports.getPulls = function() {
+
+};
