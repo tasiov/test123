@@ -42,14 +42,28 @@ module.exports = function(app, express) {
       });
     });
 
-  app.route('/api/send-favorite')
+  app.route('/api/favorite')
+    .get(function(req, res) {
+      FaveRepos.getFavoritedReposAsync(req.session.userHandle)
+      .then((faveRepos) => {
+        console.log('got all favorites');
+        res.send(faveRepos);
+      })
+    })
     .post(function(req, res) {
       FaveRepos.insertFavoritedRepoAsync(req.body.id, req.session.userHandle)
-      .then( () => {
+      .then(() => {
         console.log(req.body.id, req.session.userHandle);
         res.send('received');
       });
-    });
+    })
+    .delete(() => {
+      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.session.userHandle)
+      .then(() => {
+        console.log('deleted');
+        res.send('deleted');
+      })
+    })
 
 
   app.route('/api/user')

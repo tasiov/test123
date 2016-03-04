@@ -14,7 +14,7 @@ let dbJoinTableQuery = `users INNER JOIN repos_users
 													ON repos_users.repo_id = repos.internal_id`
 
 FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefresh) {
-  if (!forceRefresh && this._user.login) {
+  if (!forceRefresh) {
   return new Promise((resolve) => resolve(this._favoritedRepos));
   } else {
   return db.raw(`SELECT repos.name FROM ${dbJoinTableQuery} 

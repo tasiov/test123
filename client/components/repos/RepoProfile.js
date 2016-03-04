@@ -24,7 +24,7 @@ class RepoProfile extends React.Component {
   }
 
   favorRepo() {
-    $.post('/api/send-favorite', this.state.repoToRender, (data) => {
+    $.post('/api/favorite', this.state.repoToRender, (data) => {
       $('.favorite').html('Favorited!');
       this.render();
     });
