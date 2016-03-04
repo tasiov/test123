@@ -1,5 +1,6 @@
 var config = require('../config');
 var request = require('request');
+var _ = require('lodash');
 
 // unless filters out 'path' from the middleware that uses it
 module.exports.unless = function(path, middleware) {
@@ -39,7 +40,8 @@ module.exports.getAccessToken = function(code, callback) {
 module.exports.getUserInfo = function(token, callback) {
   var requestParams = {
     url: 'https://api.github.com/user?' + token,
-    headers: {'User-Agent': 'Good-First-Ticket'}
+    headers: {'User-Agent': 'Good-First-Ticket'},
+    qs: {client_id: config.githubClientId, client_secret: config.githubSecret}
   };
 
   request(requestParams, function(error, response) {
@@ -62,6 +64,36 @@ module.exports.formatUserObj = function(userObj) {
   return formatObj;
 }
 
-module.exports.getPulls = function() {
+// getPullRequests takes in a username and repo as arguments
+// and returns an object containing all the open and closed
+// pull requests instantiated by that user
+module.exports.getPullRequests = function(userHandle, repo, owner, callback) {
+  // example: https://api.github.com/repos/photogenic-wound/DapperArgentina/pulls?state=closed
+  var requestParams = {
+    url: 'https://api.github.com/repos/'
+       + owner + '/'
+       + repo + '/pulls?state=all',
+    headers: {'User-Agent': 'Good-First-Ticket'},
+    qs: {client_id: config.githubClientId, client_secret: config.githubSecret}
+  };
 
+  request(requestParams, function(error, response) {
+    if (error) {
+      callback(error, null);
+    } else {
+      pullsArray = JSON.parse(response.body);
+      var userPullReqs = {open: [], closed: []};
+
+      _.forEach(pullsArray, function(pullObj) {
+        if (pullObj.user.login === userHandle) {
+          if (pullObj.state === "open") {
+            userPullReqs.open.push(pullObj);
+          } else if (pullObj.state === "closed") {
+            userPullReqs.closed.push(pullObj);
+          }
+        }
+      });
+      callback(null, userPullReqs);
+    }
+  });
 };
