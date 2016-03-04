@@ -5,7 +5,7 @@ var db = require('../db/database');
 var _ = require('lodash');
 
 var FavoritedRepos = function() {
-	this._favoritedRepos = [];
+	this._favoritedRepos = {empty: true};
 }
 
 let dbJoinTableQuery = `users INNER JOIN repos_users 
@@ -14,18 +14,21 @@ let dbJoinTableQuery = `users INNER JOIN repos_users
 													ON repos_users.repo_id = repos.internal_id`
 
 FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefresh) {
-  if (!forceRefresh) {
+  if (!this._favoritedRepos.empty && !forceRefresh) {
   return new Promise((resolve) => resolve(this._favoritedRepos));
   } else {
-  return db.raw(`SELECT repos.name FROM ${dbJoinTableQuery} 
+  return db.raw(`SELECT repos.*
+   							FROM ${dbJoinTableQuery} 
   							WHERE users.login = '${userHandle}'`)
            .then((results) => {
+           		this._favoritedRepos = {empty: true};
               var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
-              this._favoritedRepos = RowDataArray.map(RowData => {
+              RowDataArray.forEach(RowData => {
                 var regObj = {};
                 Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
-                return regObj;
+                this._favoritedRepos[regObj.id] = regObj;
               })
+              this._favoritedRepos.empty = false;
               return this._favoritedRepos;
            }); 
   }
