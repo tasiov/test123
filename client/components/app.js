@@ -99,6 +99,7 @@ const App = class App extends React.Component {
               languages: this.state.languages,
               getIssues: this.getIssues.bind(this),
               getRepos: this.getRepos.bind(this),
+              getFavedRepos: this.getFavedRepos.bind(this),
               user: this.state.user,
               favedRepos: this.state.favedRepos,
               favorites: { "results": [
