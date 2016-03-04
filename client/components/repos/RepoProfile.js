@@ -13,7 +13,9 @@ class RepoProfile extends React.Component {
       issues: []
     };
 
-    this.getRepo = this.getRepo.bind(this);
+  }
+  isFavorite() {
+    return !!(this.props.favedRepos[this.props.routeParams.repoId]);
   }
 
   getRepo(id) {
@@ -24,22 +26,22 @@ class RepoProfile extends React.Component {
   }
 
   favorRepo() {
-    $.post('/api/favorite', this.state.repoToRender, (data) => {
-      $('.favorite').html('Favorited!');
-      this.render();
-    });
-  }
-
-  componentDidUpdate () {
-    //Anytime the component renders, scroll to the top of the repo profile
-    $('.main-repo-view')[0].scrollTop = 0;
+    if(!this.isFavorite()) {
+      $.post('/api/favorite', this.state.repoToRender, (data) => {
+        this.props.getFavedRepos();
+      });
+    }
   }
   
   componentWillMount () {
     this.getRepo(this.props.routeParams.repoId);
   }
 
+
   render() {
+    let favoritedText = this.isFavorite() ? 'Favorited' : 'Add to Favorites'
+   
+ 
     return (
     <div>
       <div className="row main-repo-view"> 
@@ -56,7 +58,7 @@ class RepoProfile extends React.Component {
                   <strong className="center col s3"><span className="octicon octicon-issue-opened"></span> beginner tickets {this.state.repoToRender.beginner_tickets}</strong>
                   <strong className="center col s3"><span className="octicon octicon-git-branch"></span> forks {this.state.repoToRender.forks}</strong>
                   <div className="right-align col s3 mega-octicon octicon-thumbsup" onClick={ () => {this.favorRepo()} }>
-                    <span className="green-text lighten-2 favorite">Favorite this repo</span>
+                    <span className="green-text lighten-2 favorite">{favoritedText}</span>
                   </div>
                 </div>
                 <div className="row">
