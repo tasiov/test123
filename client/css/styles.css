@@ -6,3 +6,7 @@
    overflow: auto; 
    max-height: 100vh;
 }
+
+.user-favorite-entry {
+	opacity:0;
+}
