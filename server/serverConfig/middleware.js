@@ -11,7 +11,7 @@ var passport = require('passport');
 passport.use(new GitHubStrategy({
   clientID: config.githubClientId,
   clientSecret: config.githubSecret,
-  callbackURL: 'http://localhost:3000/auth/github/callback'
+  callbackURL: 'http://104.236.168.119:3000//auth/github/callback'
 }, function(accessToken, refreshToken, profile, done) {
   done(null, {
     accessToken: accessToken,
