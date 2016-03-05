@@ -1,13 +1,13 @@
 const React = require('react');
 const Link = require('react-router').Link;
 
-class RepoEntry extends React.Component {
+class PullEntry extends React.Component {
   constructor (props) {
   	super(props)
   }
 
   render(){
-  	return <p>Test</p>
+  	return <p>{json.stringify(this.props.data)}</p>
   }
  }
 

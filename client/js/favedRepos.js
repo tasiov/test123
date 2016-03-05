@@ -3,6 +3,7 @@
 const serverUrl = 'http://104.236.168.119:3000';
 const $ = require('jquery');
 
+
 module.exports = {};
 
 
@@ -17,10 +18,11 @@ module.exports.getFavedReposFromApi = function (successCallback, errCallback) {
   $.ajax(options);  
 };
 
-module.exports.deleteFavedReposFromApi = function (successCallback, errCallback) {
+module.exports.deleteFavedRepoFromApi = function (repoId, successCallback, errCallback) {
   var options = {
     url: serverUrl + '/api/favorite',
-    type: 'GET',
+    type: 'DELETE',
+    data: {id:repoId},
     success: successCallback,
     error: errCallback
   };
