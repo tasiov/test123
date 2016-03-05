@@ -15,22 +15,21 @@ let dbJoinTableQuery = `users INNER JOIN repos_users
 
 FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefresh) {
   if (!this._favoritedRepos.empty && !forceRefresh) {
-  return new Promise((resolve) => resolve(this._favoritedRepos));
+  	return new Promise((resolve) => resolve(this._favoritedRepos));
   } else {
-  return db.raw(`SELECT repos.*
-   							FROM ${dbJoinTableQuery} 
-  							WHERE users.login = '${userHandle}'`)
-           .then((results) => {
-           		this._favoritedRepos = {empty: true};
-              var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
-              RowDataArray.forEach(RowData => {
-                var regObj = {};
-                Object.keys(RowData).forEach(key => regObj[key] = RowData[key]);
-                this._favoritedRepos[regObj.id] = regObj;
-              })
-              this._favoritedRepos.empty = false;
-              return this._favoritedRepos;
-           }); 
+  	return db.raw(`SELECT repos.* FROM ${dbJoinTableQuery} WHERE users.login = '${userHandle}'`)
+    .then((results) => {
+   		this._favoritedRepos = {empty: true};
+      var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
+      RowDataArray.forEach(RowData => {
+      	let id = RowData.id;
+      	this._favoritedRepos.empty ? delete this._favoritedRepos.empty: null;
+        Object.keys(RowData).forEach(key => {
+        	this._favoritedRepos[id][key] = RowData[key]
+        });
+      });
+      return this._favoritedRepos;
+    }); 
   }
 }
 
@@ -39,13 +38,11 @@ FavoritedRepos.prototype.insertFavoritedRepoAsync = function(gitRepoId, userHand
 			db.raw(`SELECT internal_id FROM repos WHERE id = ${gitRepoId};`),
 			db.raw(`SELECT internal_id FROM users WHERE login = '${userHandle}';`)
 		]).then((allResults) => {
-			var repoInternalId = allResults[0][0][0]['internal_id'];
-			var userInternalId = allResults[1][0][0]['internal_id'];
+			let repoInternalId = allResults[0][0][0]['internal_id'];
+			let userInternalId = allResults[1][0][0]['internal_id'];
 			return db.raw(`INSERT INTO repos_users (repo_id, user_id) 
 							VALUES (${repoInternalId}, ${userInternalId});`)
-							.then( () => {
-								return this.getFavoritedReposAsync(userHandle, true);
-							});
+			  .then( () => this.getFavoritedReposAsync(userHandle, true));
 		});
 }
 
@@ -58,9 +55,7 @@ FavoritedRepos.prototype.deleteFavoritedRepoAsync = function(gitRepoId, userHand
 			var userInternalId = allResults[1][0][0]['internal_id'];
 			return db.raw(`DELETE FROM repos_users WHERE 
 				repo_id=${repoInternalId} && user_id=${userInternalId};`)
-							.then( () => {
-								return this.getFavoritedReposAsync(userHandle, true);
-							});
+				.then( () => this.getFavoritedReposAsync(userHandle, true));
 		});
 }
 
