@@ -18,6 +18,10 @@ var Pulls = require('../models/pulls');
 Pulls = new Pulls();
 var passport = require('passport');
 
+var extractUserKey = function(req, key) {
+  return JSON.parse(req.user.profile._raw)[key];
+}
+
 module.exports = function(app, express) {
 
   app.get('/', function(req, res) {
@@ -59,21 +63,21 @@ module.exports = function(app, express) {
 
   app.route('/api/favorite')
     .get(function(req, res) {
-      FaveRepos.getFavoritedReposAsync(req.session.userHandle)
+      FaveRepos.getFavoritedReposAsync(req.user.profile.username)
       .then((faveRepos) => {
         console.log('got all favorites');
         res.send(faveRepos);
       })
     })
     .post(function(req, res) {
-      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.session.userHandle)
+      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.user.profile.username)
       .then(() => {
         console.log(req.body.id, req.session.userHandle);
         res.send('received');
       });
     })
     .delete(() => {
-      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.session.userHandle)
+      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.user.profile.username)
       .then(() => {
         console.log('deleted');
         res.send('deleted');
@@ -84,7 +88,7 @@ module.exports = function(app, express) {
   app.route('/api/user')
     .get(function(req, res){
       console.log('getting user');
-      User.getUserAsync(req.session.userHandle)
+      User.getUserAsync(req.user.profile.username)
       .then((userObj) => {
         res.send(userObj);
       })
@@ -153,11 +157,11 @@ module.exports = function(app, express) {
   app.get('/repo/pulls', function(req, res) {
     // example request url:
     //    http://localhost:3000/repo/pulls?repo=DapperArgentina&owner=photogenic-wound
-    utils.getPullRequestsAsync(req.session.userHandle, req.query.repo, req.query.owner)
+    utils.getPullRequestsAsync(req.user.profile.username, req.query.repo, req.query.owner)
     .then(function(data) {
       var pulls = utils.formatPulls(data);
       _.forEach(pulls, function(pull) {
-        Pulls.makePullByUserAsync(pull, req.session.userHandle);
+        Pulls.makePullByUserAsync(pull, req.user.profile.username);
       });
     })
     .catch(function(err) {
