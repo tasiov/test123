@@ -25,16 +25,16 @@ User.prototype.getUserAsync = (userHandle, forceUpdate) => {
     }
 }
 
-User.prototype.updateUserAsync = function(userObj) {
-  let userQuery = Object.keys(userObj).reduce((prev, key, index, coll) => {
-    prev = prev + key + '="' + userObj[key] + '"';
-    return index !== (coll.length -1) ? prev + ',' : prev;
-  }, "");
+User.prototype.updateUserAsync = function(user) {
+  if(user.id && user.login) {
+    let userQuery = Object.keys(userObj).reduce((prev, key, index, coll) => {
+      prev = prev + key + '="' + userObj[key] + '"';
+      return index !== (coll.length -1) ? prev + ',' : prev;
+    }, "");
 
-  return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
-  .then( () => {
-    return this.getUserAsync(userObj.login, true);
-  });
+    return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
+    .then( () => this.getUserAsync(userObj.login, true));
+  }
 }
 
 User.prototype.makeNewUserAsync = function(user) {
