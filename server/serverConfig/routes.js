@@ -16,8 +16,20 @@ var FaveRepos = require('../models/favoritedRepos');
 FaveRepos = new FaveRepos();
 var Pulls = require('../models/pulls');
 Pulls = new Pulls();
+var passport = require('passport');
 
 module.exports = function(app, express) {
+
+  app.get('/', function(req, res) {
+    if (req.isAuthenticated()) {
+      res.redirect('/app');
+      console.log('user is authenticated');
+      
+    } else {
+      res.redirect('/auth/github');
+    }
+  })
+
 
   app.route('/api')
     .get(function(req, res){
@@ -88,48 +100,55 @@ module.exports = function(app, express) {
     }
   });
 
+  app.get('/auth/github', passport.authenticate('github'));
+  app.get('/auth/github/callback', 
+    passport.authenticate('github', {failureRedirect:'/'}),
+    function(req, res) {
+      console.log('successful auth');
+      res.redirect('/app');
+    });
   // GitHub redirects user to /login/auth endpoint after login
-  app.get('/login/auth', function(req, res) {
-    req.session.user = true;
+  // app.get('/login/auth', function(req, res) {
+  //   req.session.user = true;
 
-    // Make initial request to GitHub OAuth for access token
-    utils.getAccessTokenAsync(req.query.code)
-    .then(function(result) {
-      var access_token = result.body;
-      req.session.access_token = access_token;
+  //   // Make initial request to GitHub OAuth for access token
+  //   utils.getAccessTokenAsync(req.query.code)
+  //   .then(function(result) {
+  //     var access_token = result.body;
+  //     req.session.access_token = access_token;
 
-      // Make request to github for current user information
-      utils.getUserInfoAsync(access_token)
-      .then(function(result) {
-        // Format user object so that it can be consumed by mysql
-        var userObj = utils.formatUserObj(JSON.parse(result.body));
-        req.session.userHandle = userObj.login;
-        req.session.save(utils.logError);
+  //     // Make request to github for current user information
+  //     utils.getUserInfoAsync(access_token)
+  //     .then(function(result) {
+  //       // Format user object so that it can be consumed by mysql
+  //       var userObj = utils.formatUserObj(JSON.parse(result.body));
+  //       req.session.userHandle = userObj.login;
+  //       req.session.save(utils.logError);
 
-        // Check if current user exists in the db
-        User.getUserAsync(userObj.login)
-        .then(function(user) {
+  //       // Check if current user exists in the db
+  //       User.getUserAsync(userObj.login)
+  //       .then(function(user) {
 
-          if (user.login === undefined) {
-            // If user is not in db, insert new user
-            User.makeNewUserAsync(userObj)
-            .then(function(data) {
-              console.log('new user created in db: ', data);
-              res.redirect('/')
-            }).catch(console.log);
-          } else {
+  //         if (user.login === undefined) {
+  //           // If user is not in db, insert new user
+  //           User.makeNewUserAsync(userObj)
+  //           .then(function(data) {
+  //             console.log('new user created in db: ', data);
+  //             res.redirect('/')
+  //           }).catch(console.log);
+  //         } else {
 
-            // If user is currently in db, update user data
-            User.updateUserAsync(userObj)
-            .then(function(data) {
-              console.log('updated user in db: ', data);
-              res.redirect('/')
-            }).catch(console.log);
-          }
-        }).catch(console.log);
-      }).catch(console.log);
-    }).catch(console.log);
-  });
+  //           // If user is currently in db, update user data
+  //           User.updateUserAsync(userObj)
+  //           .then(function(data) {
+  //             console.log('updated user in db: ', data);
+  //             res.redirect('/')
+  //           }).catch(console.log);
+  //         }
+  //       }).catch(console.log);
+  //     }).catch(console.log);
+  //   }).catch(console.log);
+  // });
 
   app.get('/repo/pulls', function(req, res) {
     // example request url:
