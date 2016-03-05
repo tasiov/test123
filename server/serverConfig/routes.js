@@ -49,19 +49,20 @@ module.exports = (app, express) => {
 
   app.route('/api/favorite')
     .get((req, res) => {
-      FaveRepos.getFavoritedReposAsync(req.user.profile.username)
+      console.log('hi',req.session);
+      FaveRepos.getFavoritedReposAsync(req.session.passport.user.profile.username)
       .then((faveRepos) => {
         res.send(faveRepos);
       })
     })
     .post((req, res) => {
-      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.user.profile.username)
+      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.session.passport.user.profile.username)
       .then(() => {
         res.send('received');
       });
     })
     .delete(() => {
-      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.user.profile.username)
+      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.session.passport.user.profile.username)
       .then(() => {
         res.send('deleted');
       })
@@ -69,7 +70,7 @@ module.exports = (app, express) => {
 
   app.route('/api/user')
     .get((req, res) =>{
-      Users.getUserAsync(req.user.profile.username)
+      Users.getUserAsync(req.session.passport.user.profile.username)
       .then((userObj) => {
         res.send(userObj);
       })

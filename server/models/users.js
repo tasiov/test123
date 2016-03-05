@@ -7,37 +7,37 @@ var Users = function() {
  this._users = {};
 };
 
-User.prototype.getUserAsync = (userHandle, forceUpdate) => {
-  if (this._user[userHandle] && !forceUpdate ) {
-    return new Promise((resolve) => resolve(this._user[userHandle]));
+Users.prototype.getUserAsync = function (userHandle, forceUpdate) {
+  if (this._users[userHandle] && !forceUpdate ) {
+    return new Promise((resolve) => resolve(this._users[userHandle]));
   } else {
     return db.raw(`SELECT * FROM users`)
       .then((results) => {
         let RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
         RowDataArray.forEach(RowData => {
-          let login = RowData.login;
+          this._users[RowData.login] = {};
           Object.keys(RowData).forEach(key => {
-            this._users[login][key] = RowData[key];
+            this._users[RowData.login][key] = RowData[key];
           });
         })
-        return this._user[userHandle];
+        return this._users[userHandle];
       });
     }
 }
 
-User.prototype.updateUserAsync = function(user) {
+Users.prototype.updateUserAsync = function (user) {
   if(user.id && user.login) {
-    let userQuery = Object.keys(userObj).reduce((prev, key, index, coll) => {
-      prev = prev + key + '="' + userObj[key] + '"';
+    let userQuery = Object.keys(user).reduce((prev, key, index, coll) => {
+      prev = prev + key + '="' + user[key] + '"';
       return index !== (coll.length -1) ? prev + ',' : prev;
     }, "");
 
-    return db.raw(`UPDATE users SET ${userQuery} WHERE login='${userObj.login}'`)
-    .then( () => this.getUserAsync(userObj.login, true));
+    return db.raw(`UPDATE users SET ${userQuery} WHERE login='${user.login}'`)
+    .then( () => this.getUserAsync(user.login, true));
   }
 }
 
-User.prototype.makeNewUserAsync = function(user) {
+Users.prototype.makeNewUserAsync = function (user) {
   if(user.id && user.login) {
     // Function to map user properties to usable SQL strings
     let userKeys = [];

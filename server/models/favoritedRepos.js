@@ -22,10 +22,10 @@ FavoritedRepos.prototype.getFavoritedReposAsync = function(userHandle, forceRefr
    		this._favoritedRepos = {empty: true};
       var RowDataArray = Object.keys(results[0]).map(k => results[0][k]);
       RowDataArray.forEach(RowData => {
-      	let id = RowData.id;
+      	this._favoritedRepos[RowData.id] = {};
       	this._favoritedRepos.empty ? delete this._favoritedRepos.empty: null;
         Object.keys(RowData).forEach(key => {
-        	this._favoritedRepos[id][key] = RowData[key]
+        	this._favoritedRepos[RowData.id][key] = RowData[key]
         });
       });
       return this._favoritedRepos;

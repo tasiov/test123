@@ -33,17 +33,17 @@ const App = class App extends React.Component {
   }
 
   getFavedRepos() {
-    FavedRepos.getFavedReposFromApi((favedRepos) => this.setState({favedRepos}),
+    FavedRepos.getFavedReposFromApi(favedRepos => this.setState({favedRepos}),
     console.log);
   }
 
   setLanguages () {
-    Repos.getLanguages((languages) => this.setState({languages}), console.log);
+    Repos.getLanguages(languages => this.setState({languages}), console.log);
   }
   
   getIssues(searchTerm, language){
     //Fetch issues;
-    Issues.getIssues((data) => {
+    Issues.getIssues(data => {
       this.setState({
         numberOfTickets: data.length,
         ticketsToRender: data.slice(0,199)
@@ -54,7 +54,7 @@ const App = class App extends React.Component {
   getRepos(searchTerm, language){
     //Fetch repos;
     //refactor to exclude 'self/this' with es6 syntax?
-    Repos.getRepos((data) => {
+    Repos.getRepos(data => {
       this.setState({
         numberOfRepos: data.length,
         reposToRender: data.slice(0,199)
