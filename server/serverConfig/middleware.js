@@ -1,11 +1,12 @@
+'use strict';
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var passport = require('passport');
+var GitHubStrategy = require('passport-github').Strategy;
+
 var config = require('../config');
 var utils = require('./utils');
-var GitHubStrategy = require('passport-github').Strategy;
-var passport = require('passport');
-
 
 
 passport.use(new GitHubStrategy({
@@ -19,19 +20,19 @@ passport.use(new GitHubStrategy({
   });
 }));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-module.exports = function(app, express) {
+module.exports = (app, express) => {
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
-  app.use(function(req, res, next) {
+  app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
@@ -40,10 +41,6 @@ module.exports = function(app, express) {
   app.use(session({secret: 'it\'s a secret'}));
   app.use(passport.initialize());
   app.use(passport.session());
-
-
-
-
 
 
   app.use('/app', express.static(__dirname + '/../../client'));

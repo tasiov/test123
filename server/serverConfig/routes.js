@@ -1,101 +1,83 @@
+'use strict';
 var request = require('request');
-var config = require('../config');
 var _ = require('lodash');
+var passport = require('passport');
+var Promise = require('bluebird');
 
 var utils = require('./utils');
-var Promise = require('bluebird');
-Promise.promisifyAll(utils);
+var config = require('../config');
 
 var Issues = require('../models/issues');
-Issues = new Issues();
-var Repos = require('../models/repos');
-Repos = new Repos();
-var User = require('../models/user');
-User = new User();
-var FaveRepos = require('../models/favoritedRepos');
-FaveRepos = new FaveRepos();
+var Users = require('../models/users');
 var Pulls = require('../models/pulls');
-Pulls = new Pulls();
-var passport = require('passport');
+var FaveRepos = require('../models/favoritedRepos');
+var Repos = require('../models/repos');
 
-var extractUserKey = function(req, key) {
-  return JSON.parse(req.user.profile._raw)[key];
-}
+var Issues = new Issues();
+var Users = new Users();
+var Pulls = new Pulls();
+var FaveRepos = new FaveRepos();
+var Repos = new Repos();
 
-module.exports = function(app, express) {
-
-  app.get('/', function(req, res) {
-    if (req.isAuthenticated()) {
-      res.redirect('/app');
-      console.log('user is authenticated');
-      
-    } else {
-      res.redirect('/auth/github');
-    }
-  })
+Promise.promisifyAll(utils);
 
 
-  app.route('/api')
-    .get(function(req, res){
-      res.send('Hello World');
-    });
+module.exports = (app, express) => {
+
+  app.get('/', (req, res) => {
+    req.isAuthenticated() ? res.redirect('/app') : res.redirect('/auth/github');
+  });
 
   app.route('/api/issues')
-    .get(function(req, res) {
+    .get((req, res) => {
       Issues.getIssues()
       .then((results) => res.send(results))
       .catch((err) => {
         console.log(err);
-        res.statusCode = 501;
-        res.send('Unknown Server Error');
+        res.status(501).send('Unknown Server Error');
       });
     });
 
   app.route('/api/repos')
-    .get(function(req, res){
+    .get((req, res) =>{
       Repos.getRepos()
       .then((results) => res.send(results))
       .catch(() => {
-        res.statusCode = 501;
-        res.send('Unknown Server Error');
+        res.status(501).send('Unknown Server Error');
       });
     });
 
   app.route('/api/favorite')
-    .get(function(req, res) {
-      FaveRepos.getFavoritedReposAsync(req.user.profile.username)
+    .get((req, res) => {
+      console.log('hi',req.session);
+      FaveRepos.getFavoritedReposAsync(req.session.passport.user.profile.username)
       .then((faveRepos) => {
-        console.log('got all favorites');
         res.send(faveRepos);
       })
     })
-    .post(function(req, res) {
-      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.user.profile.username)
+    .post((req, res) => {
+      FaveRepos.insertFavoritedRepoAsync(req.body.id, req.session.passport.user.profile.username)
       .then(() => {
-        console.log(req.body.id, req.session.userHandle);
         res.send('received');
       });
     })
     .delete(() => {
-      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.user.profile.username)
+      FaveRepos.deleteFavoritedRepoAsync(req.body.id, req.session.passport.user.profile.username)
       .then(() => {
-        console.log('deleted');
         res.send('deleted');
       })
     })
 
-
   app.route('/api/user')
-    .get(function(req, res){
-      console.log('getting user');
-      User.getUserAsync(req.user.profile.username)
+    .get((req, res) =>{
+      Users.getUserAsync(req.session.passport.user.profile.username)
       .then((userObj) => {
         res.send(userObj);
       })
     })
 
   // Kills the user session on logout
-  app.get('/logout', function(req, res) {
+  app.get('/logout', (req, res) => {
     if(req.session.user) {
       req.session.destroy(console.log);
       res.redirect('https://github.com/logout');
@@ -105,12 +87,53 @@ module.exports = function(app, express) {
   });
 
   app.get('/auth/github', passport.authenticate('github'));
+
   app.get('/auth/github/callback', 
     passport.authenticate('github', {failureRedirect:'/'}),
-    function(req, res) {
-      console.log('successful auth');
-      res.redirect('/app');
+    (req, res) => {
+       Users.getUserAsync(req.user.profile.username)
+      .then((user) => {
+        let userObj = JSON.parse(req.user.profile._raw)
+        if (user.login === undefined) {
+          // If user is not in db, insert new user
+          Users.makeNewUserAsync(userObj)
+          .then((data) => {
+            res.redirect('/app')
+          }).catch(console.log);
+        } else {
+          // If user is currently in db, update user data
+          Users.updateUserAsync(userObj)
+          .then((data) => {
+            res.redirect('/app')
+          }).catch(console.log);
+        }
+      });
     });
+}
+      
+
+
+
+
+
+
+//   app.get('/repo/pulls', function(req, res) {
+//     // example request url:
+//     //    http://localhost:3000/repo/pulls?repo=DapperArgentina&owner=photogenic-wound
+//     utils.getPullRequestsAsync(req.user.profile.username, req.query.repo, req.query.owner)
+//     .then(function(data) {
+//       var pulls = utils.formatPulls(data);
+//       _.forEach(pulls, function(pull) {
+//         Pulls.makePullByUserAsync(pull, req.user.profile.username);
+//       });
+//     })
+//     .catch(function(err) {
+//       console.log(err);
+//     });
+//     res.send('pulls');
+//   });
+// }
+
   // GitHub redirects user to /login/auth endpoint after login
   // app.get('/login/auth', function(req, res) {
   //   req.session.user = true;
@@ -153,20 +176,3 @@ module.exports = function(app, express) {
   //     }).catch(console.log);
   //   }).catch(console.log);
   // });
-
-  app.get('/repo/pulls', function(req, res) {
-    // example request url:
-    //    http://localhost:3000/repo/pulls?repo=DapperArgentina&owner=photogenic-wound
-    utils.getPullRequestsAsync(req.user.profile.username, req.query.repo, req.query.owner)
-    .then(function(data) {
-      var pulls = utils.formatPulls(data);
-      _.forEach(pulls, function(pull) {
-        Pulls.makePullByUserAsync(pull, req.user.profile.username);
-      });
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
-    res.send('pulls');
-  });
-}
