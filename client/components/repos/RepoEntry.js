@@ -22,6 +22,7 @@ class RepoEntry extends React.Component {
     }
   }
 
+
   render() {
     let favoritedText = this.isFavorite() ? 'Favorited' : 'Add to Favorites'
    

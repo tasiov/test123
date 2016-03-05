@@ -17,6 +17,7 @@ class UserFavoriteList extends React.Component {
   componentDidMount () {
      console.log("initializing collapsibles") 
     $('.collapsible').collapsible();
+    Materialize.showStaggeredList('#user-favorite-repos')
   }
 
 
@@ -26,7 +27,7 @@ class UserFavoriteList extends React.Component {
       <div className="main-favorite-view">
         <h4>My Favorite Repos</h4>
 
-        <ul className="collapsible popout" data-collapsible="accordion">
+        <ul id="user-favorite-repos"className="collapsible popout" data-collapsible="accordion">
           {_.map (this.props.favorites, (repo, index) => {
               if (index !== "empty"){
                 return <FavoriteEntry data={repo} key={index} />

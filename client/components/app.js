@@ -6,10 +6,10 @@ const Users = require('../js/users');
 const FavedRepos = require('../js/favedRepos');
 
 const linksList = [
-  {name: "my profile", url: '/profile'},
-  {name: "tickets", url: '/'},
-  {name: "repositories", url: '/repos'},
+  {name: "new tickets", url: '/'},
+  {name: "repos", url: '/repos'},
   {name: "getting started", url: '/resources'},
+  {name: "pull requests", url: '/pulls'}
 ];
 
 const App = class App extends React.Component {
@@ -88,7 +88,7 @@ const App = class App extends React.Component {
     <div className='app-shell grey lighten-2'>
       <NavBar links={linksList}/>
       <div className="row">
-        <div className="main col-sm-10 container">
+        <div className="main col-md-12 container">
           {React.cloneElement(this.props.children, {
               route: this.state.route,
               reposToRender: this.state.reposToRender,

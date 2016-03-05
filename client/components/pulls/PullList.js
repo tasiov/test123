@@ -9,7 +9,17 @@ class PullList extends React.Component {
   }
 
   render() {
-    return ()
+    return (     
+   	  <div >
+        <PullSearch searchHandler={this.props.getFavedRepos} languages={this.props.languages} />
+        <h4>You have {this.props.FavedRepos} pull requests</h4>
+        <div className="main-pulls-view">
+          {this.props.FavedRepos.map ((pull, index) => 
+            <PullEntry data={pull} key={index} />
+          )}
+        </div>
+      </div>
+    )
   }
 }
 
