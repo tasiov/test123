@@ -9,7 +9,7 @@ require(__dirname + '/serverConfig/middleware.js')(app, express);
 // routes.js defines the application's endpoints
 require(__dirname + '/serverConfig/routes.js')(app, express);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 
 console.log(`server running on port ${port} in ${process.env.NODE_ENV} mode`);
 // start listening to requests on port 3000
