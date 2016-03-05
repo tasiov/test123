@@ -94,7 +94,7 @@ module.exports = (app, express) => {
        Users.getUserAsync(req.user.profile.username)
       .then((user) => {
         let userObj = JSON.parse(req.user.profile._raw)
-        if (user.login === undefined) {
+        if (user === undefined) {
           // If user is not in db, insert new user
           Users.makeNewUserAsync(userObj)
           .then((data) => {
