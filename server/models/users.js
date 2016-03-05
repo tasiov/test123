@@ -3,8 +3,8 @@ const Promise = require('bluebird');
 var db = require('../db/database');
 var _ = require('lodash');
 
-var User = function() {
- this._user = {};
+var Users = function() {
+ this._users = {};
 };
 
 User.prototype.getUserAsync = function(userHandle, forceUpdate) {
@@ -58,4 +58,4 @@ User.prototype.makeNewUserAsync = function(user) {
 }
 
 
-module.exports = User;
+module.exports = Users;

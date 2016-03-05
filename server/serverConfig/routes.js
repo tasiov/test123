@@ -8,13 +8,13 @@ var utils = require('./utils');
 var config = require('../config');
 
 var Issues = require('../models/issues');
-var User = require('../models/user');
+var Users = require('../models/users');
 var Pulls = require('../models/pulls');
 var FaveRepos = require('../models/favoritedRepos');
 var Repos = require('../models/repos');
 
 var Issues = new Issues();
-var User = new User();
+var Users = new Users();
 var Pulls = new Pulls();
 var FaveRepos = new FaveRepos();
 var Repos = new Repos();
@@ -69,7 +69,7 @@ module.exports = (app, express) => {
 
   app.route('/api/user')
     .get((req, res) =>{
-      User.getUserAsync(req.user.profile.username)
+      Users.getUserAsync(req.user.profile.username)
       .then((userObj) => {
         res.send(userObj);
       })
@@ -90,18 +90,18 @@ module.exports = (app, express) => {
   app.get('/auth/github/callback', 
     passport.authenticate('github', {failureRedirect:'/'}),
     (req, res) => {
-       User.getUserAsync(req.user.profile.username)
+       Users.getUserAsync(req.user.profile.username)
       .then((user) => {
         let userObj = JSON.parse(req.user.profile._raw)
         if (user.login === undefined) {
           // If user is not in db, insert new user
-          User.makeNewUserAsync(userObj)
+          Users.makeNewUserAsync(userObj)
           .then((data) => {
             res.redirect('/app')
           }).catch(console.log);
         } else {
           // If user is currently in db, update user data
-          User.updateUserAsync(userObj)
+          Users.updateUserAsync(userObj)
           .then((data) => {
             res.redirect('/app')
           }).catch(console.log);
