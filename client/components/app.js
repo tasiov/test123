@@ -29,11 +29,16 @@ const App = class App extends React.Component {
   }
 
   getUser(){
-    Users.getUserFromApi((result) => {
-      this.setState({user:result});
-    }, (result) => {
-      console.log("Err",result)
-    })
+    Users.getUserFromApi(user => this.setState({user}), console.log);
+  }
+
+  getFavedRepos() {
+    FavedRepos.getFavedReposFromApi((favedRepos) => this.setState({favedRepos}),
+    console.log);
+  }
+
+  setLanguages () {
+    Repos.getLanguages((languages) => this.setState({languages}), console.log);
   }
   
   getIssues(searchTerm, language){
@@ -55,24 +60,6 @@ const App = class App extends React.Component {
         reposToRender: data.slice(0,199)
       });
     }, console.log, searchTerm, language);
-  }
-
-  getFavedRepos() {
-    FavedRepos.getFavedReposFromApi((data) => {
-      this.setState({
-        favedRepos: data
-      });
-    }, console.log)
-  }
-
-  setLanguages () {
-    //We should only run this once per component rendering (ie. componentDidMount)
-    //Multiple calls to material_select screws up the rendering
-    Repos.getLanguages((languages) => {
-      this.setState({
-        languages: languages
-      });
-    });
   }
 
   componentWillMount() {
