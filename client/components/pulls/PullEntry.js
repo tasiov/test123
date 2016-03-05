@@ -1,8 +1,15 @@
 const React = require('react');
 const Link = require('react-router').Link;
 
-const TicketEntry = (props) => (
- 
-);
+class RepoEntry extends React.Component {
+  constructor (props) {
+  	super(props)
+  }
+
+  render(){
+  	return <p>Test</p>
+  }
+ }
+
 
 module.exports = PullEntry;
