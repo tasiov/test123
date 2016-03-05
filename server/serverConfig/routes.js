@@ -87,7 +87,7 @@ module.exports = function(app, express) {
 
   app.route('/api/user')
     .get(function(req, res){
-      console.log('getting user');
+      console.log('getting user', req.cookie);
       User.getUserAsync(req.user.profile.username)
       .then((userObj) => {
         res.send(userObj);
@@ -109,6 +109,7 @@ module.exports = function(app, express) {
     passport.authenticate('github', {failureRedirect:'/'}),
     function(req, res) {
       console.log('successful auth');
+      res.cookie('username',req.user.profile.username, {maxAge: 2600000000});
       res.redirect('/app');
     });
   // GitHub redirects user to /login/auth endpoint after login
