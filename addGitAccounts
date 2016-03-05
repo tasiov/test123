@@ -4,3 +4,6 @@ git remote add orlando https://github.com/orlandoc01/DapperArgentina
 git remote add tasio https://github.com/tasiov/DapperArgentina
 git remote add edison https://github.com/bamboostgg/DapperArgentina
 git remote add upstream https://github.com/photogenic-wound/DapperArgentina
+git remote add live ssh://root@104.236.168.119/var/repo/site.git
+git remote add liveTest ssh://root@104.236.168.119/var/repo/siteTest.git
+
